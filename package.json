@@ -1,0 +1,31 @@
+{
+  "name": "tr3s",
+  "type": "module",
+  "scripts": {
+    "dev:server": "bunx convex dev",
+    "dev:frontend": "bun run --cwd frontend dev",
+    "lint": "eslint .",
+    "lint-fix": "prettier . --write && eslint --fix ."
+  },
+  "devDependencies": {
+    "@types/bun": "1.2.14",
+    "eslint": "9.25.0",
+    "eslint-config-prettier": "10.1.5",
+    "eslint-plugin-prettier": "5.4.0",
+    "neostandard": "0.12.1",
+    "prettier": "3.5.3",
+    "prettier-plugin-tailwindcss": "0.6.11"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@clerk/backend": "1.33.0",
+    "@hono/zod-validator": "0.5.0",
+    "convex": "1.24.1",
+    "convex-helpers": "0.1.86",
+    "hono": "4.7.10",
+    "svix": "1.66.0",
+    "zod": "3.25.28"
+  }
+}
