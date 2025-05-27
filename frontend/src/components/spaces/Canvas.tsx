@@ -66,7 +66,7 @@ export function Canvas({ spaceId }: { spaceId: string }) {
       <SidebarTrigger className='relative left-3 top-3 flex-shrink-0 cursor-pointer' />
       <PresenceIndicator users={onlineUsers} />
       <CursorOverlay users={onlineUsers} />
-      <Toolbar />
+      <Toolbar spaceId={spaceId}/>
       <UserSection />
       <Chat />
     </main>

@@ -377,6 +377,64 @@ export const heartbeatSpace = mutation({
   }
 });
 
+export const leaveSpace = mutation({
+  args: {
+    spaceId: v.string()
+  },
+  handler: async (ctx, { spaceId }) => {
+    const user = await getAuthenticatedUser(ctx);
+    const spaceResult = await getSpaceByIdString(ctx, spaceId);
+
+    if (!spaceResult) {
+      throw new ConvexError('Space not found');
+    }
+
+    const { normalizedSpaceId } = spaceResult;
+    const relation = await getUserSpaceRelation(
+      ctx,
+      user._id,
+      normalizedSpaceId
+    );
+
+    if (!relation) {
+      throw new ConvexError('User is not part of this space');
+    }
+
+    const userPresence = await ctx.db
+      .query('spacesPresences')
+      .withIndex('byUserIdAndSpaceId', (q) =>
+        q.eq('userId', user._id).eq('spaceId', normalizedSpaceId)
+      )
+      .unique();
+
+    if (userPresence) {
+      await ctx.db.delete(userPresence._id);
+    }
+
+    if (relation.status === 'owner') {
+      await ctx.db.patch(normalizedSpaceId, {
+        isActive: false,
+        lastActive: Date.now()
+      });
+
+      const allOtherPresences = await ctx.db
+        .query('spacesPresences')
+        .withIndex('bySpaceId', (q) => q.eq('spaceId', normalizedSpaceId))
+        .collect();
+
+      for (const presence of allOtherPresences) {
+        await ctx.db.delete(presence._id);
+      }
+    }
+
+    return {
+      success: true,
+      wasOwner: relation.status === 'owner',
+      spaceDeactivated: relation.status === 'owner'
+    };
+  }
+});
+
 /*
 export const canAccessSpace = query({
   args: {

@@ -120,3 +120,30 @@ export const getSpacePresence = query({
     return usersWithPresence.filter((p) => p.user !== null);
   }
 });
+
+export const removeUserPresence = mutation({
+  args: {
+    spaceId: v.string()
+  },
+  handler: async (ctx, { spaceId }) => {
+    const user = await getAuthenticatedUser(ctx);
+    const normalizedSpaceId = getNormalizedSpaceId(ctx, spaceId);
+
+    if (!normalizedSpaceId) {
+      throw new ConvexError('Space not found');
+    }
+
+    const existingPresence = await ctx.db
+      .query('spacesPresences')
+      .withIndex('byUserIdAndSpaceId', (q) =>
+        q.eq('userId', user._id).eq('spaceId', normalizedSpaceId)
+      )
+      .unique();
+
+    if (existingPresence) {
+      await ctx.db.delete(existingPresence._id);
+    }
+
+    return { success: true };
+  }
+});
