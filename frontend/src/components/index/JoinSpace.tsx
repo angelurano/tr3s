@@ -24,6 +24,8 @@ import {
 import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import { JoiningSpace } from './JoiningSpace';
+import { Authenticated, Unauthenticated } from 'convex/react';
+import { SignInButton } from '@clerk/clerk-react';
 
 type SheetSide = 'left' | 'right' | 'bottom' | 'top';
 
@@ -38,18 +40,25 @@ export function JoinSpace({
 
   return (
     <>
-      {spaceJoining && (
-        <JoiningSpace
-          spaceId={spaceJoining}
-          setSpaceJoining={setSpaceJoining}
-        />
-      )}
-      <Sheet>
-        <SheetTrigger asChild>
+      <Unauthenticated>
+        <SignInButton mode='modal'>
           {children || <Button variant='neutral'>Unirse a un espacio</Button>}
-        </SheetTrigger>
-        <JoinSpaceApp side={side} setSpaceJoining={setSpaceJoining} />
-      </Sheet>
+        </SignInButton>
+      </Unauthenticated>
+      <Authenticated>
+        {spaceJoining && (
+          <JoiningSpace
+            spaceId={spaceJoining}
+            setSpaceJoining={setSpaceJoining}
+          />
+        )}
+        <Sheet>
+          <SheetTrigger asChild>
+            {children || <Button variant='neutral'>Unirse a un espacio</Button>}
+          </SheetTrigger>
+          <JoinSpaceApp side={side} setSpaceJoining={setSpaceJoining} />
+        </Sheet>
+      </Authenticated>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { useMutation } from 'convex/react';
+import { Authenticated, Unauthenticated, useMutation } from 'convex/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -34,6 +34,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoadingDialog } from '../LoadingDialog';
 import { ImagePlus, PencilLine, RefreshCcw, Loader2 } from 'lucide-react';
+import { SignInButton } from '@clerk/clerk-react';
 
 type CreateSpaceStatus = 'idle' | 'loading' | 'error';
 
@@ -42,6 +43,23 @@ interface CreateSpaceProps {
 }
 
 export default function CreateSpace({ children }: CreateSpaceProps) {
+  return (
+    <>
+      <Unauthenticated>
+        <SignInButton mode='modal'>{children}</SignInButton>
+      </Unauthenticated>
+      <Authenticated>
+        <CreateSpaceModal>{children}</CreateSpaceModal>
+      </Authenticated>
+    </>
+  )
+}
+
+function CreateSpaceModal({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const createSpace = useMutation(api.spaces.createSpace);
   const [createSpaceStatus, setCreateSpaceStatus] =
     useState<CreateSpaceStatus>('idle');
@@ -81,6 +99,7 @@ export default function CreateSpace({ children }: CreateSpaceProps) {
     </Dialog>
   );
 }
+
 
 const SPACE_IMAGES_ID = [237, 348, 443, 582, 736, 857];
 
