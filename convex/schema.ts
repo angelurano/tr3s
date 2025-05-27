@@ -17,7 +17,7 @@ export const spaceSchema = v.object({
   imagePicsumId: v.number()
 });
 
-export const spaceMemberSchema = v.object({
+export const spaceUserSchema = v.object({
   userId: v.id('users'),
   spaceId: v.id('spaces'),
   status: v.union(
@@ -29,16 +29,17 @@ export const spaceMemberSchema = v.object({
   lastUpdated: v.number()
 });
 
-// TODO: presence in space when a user is logged
-export const presenceSchema = v.object({
+// TODO: presence in space when a user join
+export const spacePresenceSchema = v.object({
   userId: v.id('users'),
   spaceId: v.id('spaces'),
   lastUpdated: v.number(),
+  present: v.boolean(),
   cursorPosition: v.object({
     x: v.number(),
     y: v.number()
   }),
-  present: v.boolean()
+  typing: v.boolean()
 });
 
 export default defineSchema({
@@ -46,10 +47,10 @@ export default defineSchema({
     .index('byExternalId', ['externalId'])
     .index('byToken', ['tokenIdentifier']),
   spaces: defineTable(spaceSchema).index('byAuthorId', ['authorId']),
-  spaceMembers: defineTable(spaceMemberSchema)
+  spacesUsers: defineTable(spaceUserSchema)
     .index('byUserIdAndSpaceId', ['userId', 'spaceId'])
     .index('bySpaceId', ['spaceId']),
-  presence: defineTable(presenceSchema)
+  spacesPresences: defineTable(spacePresenceSchema)
     .index('byUserId', ['userId'])
     .index('byUserIdAndSpaceId', ['userId', 'spaceId'])
     .index('bySpaceIdAndLastUpdated', ['spaceId', 'lastUpdated']) // This can be used to know if user is present in a space
@@ -57,5 +58,5 @@ export default defineSchema({
 
 export type User = Infer<typeof userSchema>;
 export type Space = Infer<typeof spaceSchema>;
-export type SpaceMember = Infer<typeof spaceMemberSchema>;
-export type Presence = Infer<typeof presenceSchema>;
+export type SpaceUser = Infer<typeof spaceUserSchema>;
+export type SpacePresence = Infer<typeof spacePresenceSchema>;

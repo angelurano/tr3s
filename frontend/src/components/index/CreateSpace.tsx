@@ -9,7 +9,7 @@ import { api } from '@server/_generated/api';
 import {
   createSpaceSchema,
   type CreateSpaceSchema as CreateSpaceFormValues
-} from '@server/sharedSchema';
+} from '@server/schemaShared';
 import { useDebounce } from '@/hooks/useDebounce';
 import { getURLImagePicsum } from '@/lib/utils';
 import {

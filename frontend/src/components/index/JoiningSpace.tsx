@@ -150,7 +150,7 @@ function SpaceNotFound() {
 
 function NotRelatedSpace({ spaceId }: { spaceId: string }) {
   const [status, setStatus] = useState<'idle' | 'loading'>('idle');
-  const sendJoinRequest = useMutation(api.spaces.requestJoinSpace);
+  const sendJoinRequest = useMutation(api.spacesUsers.requestJoinSpace);
 
   const handleJoinRequest = async () => {
     setStatus('loading');
@@ -279,7 +279,7 @@ function RejectedSpace({
   lastUpdated?: number;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const requestJoin = useMutation(api.spaces.requestJoinSpace);
+  const requestJoin = useMutation(api.spacesUsers.requestJoinSpace);
 
   // 5 mins since last rejection
   const rejectedTime = lastUpdated ? new Date(lastUpdated) : new Date();
@@ -381,11 +381,11 @@ function UnexpectedState() {
 }
 
 function JoiningSpaceFallback({
-  error,
-  resetErrorBoundary
-}: {
+  error
+  // resetErrorBoundary
+}:  {
   error: Error;
-  resetErrorBoundary: () => void;
+  // resetErrorBoundary: () => void;
 }) {
   const errorMessage =
     error instanceof ConvexError ? (error.data as string) : error.message;

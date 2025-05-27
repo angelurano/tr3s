@@ -13,11 +13,14 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as helpers_spaces from "../helpers/spaces.js";
 import type * as http from "../http.js";
 import type * as routes_clerkWebhook from "../routes/clerkWebhook.js";
 import type * as routes_spaces from "../routes/spaces.js";
-import type * as sharedSchema from "../sharedSchema.js";
+import type * as schemaShared from "../schemaShared.js";
 import type * as spaces from "../spaces.js";
+import type * as spacesPresences from "../spacesPresences.js";
+import type * as spacesUsers from "../spacesUsers.js";
 import type * as users from "../users.js";
 
 /**
@@ -29,11 +32,14 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "helpers/spaces": typeof helpers_spaces;
   http: typeof http;
   "routes/clerkWebhook": typeof routes_clerkWebhook;
   "routes/spaces": typeof routes_spaces;
-  sharedSchema: typeof sharedSchema;
+  schemaShared: typeof schemaShared;
   spaces: typeof spaces;
+  spacesPresences: typeof spacesPresences;
+  spacesUsers: typeof spacesUsers;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

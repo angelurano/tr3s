@@ -1,7 +1,7 @@
 import { AppSidebar } from '@/components/AppSidebar';
 import { Canvas } from '@/components/spaces/Canvas';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { createFileRoute, Navigate, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Navigate } from '@tanstack/react-router';
 import { useMutation, useQuery } from 'convex/react';
 import { Loading } from '../components/auth/Loading';
 import { api } from '@server/_generated/api';
