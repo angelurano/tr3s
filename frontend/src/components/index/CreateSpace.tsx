@@ -52,14 +52,10 @@ export default function CreateSpace({ children }: CreateSpaceProps) {
         <CreateSpaceModal>{children}</CreateSpaceModal>
       </Authenticated>
     </>
-  )
+  );
 }
 
-function CreateSpaceModal({
-  children,
-}: {
-  children: ReactNode;
-}) {
+function CreateSpaceModal({ children }: { children: ReactNode }) {
   const createSpace = useMutation(api.spaces.createSpace);
   const [createSpaceStatus, setCreateSpaceStatus] =
     useState<CreateSpaceStatus>('idle');
@@ -99,7 +95,6 @@ function CreateSpaceModal({
     </Dialog>
   );
 }
-
 
 const SPACE_IMAGES_ID = [237, 348, 443, 582, 736, 857];
 

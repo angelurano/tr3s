@@ -19,7 +19,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from './ui/navigation-menu';
-import logo from '/logoipsum.svg';
+import logo from '../../../../../../../../../../logoipsum.svg';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ThemeButton } from './theme/ThemeButton';
 import { Notifications } from './Notifications';

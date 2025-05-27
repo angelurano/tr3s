@@ -6,7 +6,6 @@ import { useMutation, useQuery } from 'convex/react';
 import { Loading } from '../components/auth/Loading';
 import { api } from '@server/_generated/api';
 import { useEffect, useState } from 'react';
-import type { Space } from '@server/schema';
 
 export const Route = createFileRoute('/spaces/$spaceId')({
   component: CheckSpaceAuth
@@ -38,10 +37,12 @@ function CheckSpaceAuth() {
 
 function EnableSpace({ spaceId }: { spaceId: string }) {
   const enableUserSpace = useMutation(api.spaces.enableUserSpace);
-  const [spaceStatus, setSpaceStatus] = useState<'loading' | 'enabled' | 'error'>('loading');
+  const [spaceStatus, setSpaceStatus] = useState<
+    'loading' | 'enabled' | 'error'
+  >('loading');
 
   useEffect(() => {
-    async function enableSpace () {
+    async function enableSpace() {
       if (spaceStatus === 'enabled') return;
 
       try {

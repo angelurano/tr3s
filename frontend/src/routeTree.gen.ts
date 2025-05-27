@@ -10,154 +10,154 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/_index'
-import { Route as IndexIndexImport } from './routes/_index/index'
-import { Route as SpacesSpaceIdImport } from './routes/spaces.$spaceId'
-import { Route as IndexSettingsImport } from './routes/_index/settings'
-import { Route as IndexFriendsImport } from './routes/_index/friends'
+import { Route as rootRoute } from './routes/__root';
+import { Route as IndexImport } from './routes/_index';
+import { Route as IndexIndexImport } from './routes/_index/index';
+import { Route as SpacesSpaceIdImport } from './routes/spaces.$spaceId';
+import { Route as IndexSettingsImport } from './routes/_index/settings';
+import { Route as IndexFriendsImport } from './routes/_index/friends';
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
   id: '/_index',
-  getParentRoute: () => rootRoute,
-} as any)
+  getParentRoute: () => rootRoute
+} as any);
 
 const IndexIndexRoute = IndexIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => IndexRoute,
-} as any)
+  getParentRoute: () => IndexRoute
+} as any);
 
 const SpacesSpaceIdRoute = SpacesSpaceIdImport.update({
   id: '/spaces/$spaceId',
   path: '/spaces/$spaceId',
-  getParentRoute: () => rootRoute,
-} as any)
+  getParentRoute: () => rootRoute
+} as any);
 
 const IndexSettingsRoute = IndexSettingsImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => IndexRoute,
-} as any)
+  getParentRoute: () => IndexRoute
+} as any);
 
 const IndexFriendsRoute = IndexFriendsImport.update({
   id: '/friends',
   path: '/friends',
-  getParentRoute: () => IndexRoute,
-} as any)
+  getParentRoute: () => IndexRoute
+} as any);
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/_index': {
-      id: '/_index'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/_index';
+      path: '';
+      fullPath: '';
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
     '/_index/friends': {
-      id: '/_index/friends'
-      path: '/friends'
-      fullPath: '/friends'
-      preLoaderRoute: typeof IndexFriendsImport
-      parentRoute: typeof IndexImport
-    }
+      id: '/_index/friends';
+      path: '/friends';
+      fullPath: '/friends';
+      preLoaderRoute: typeof IndexFriendsImport;
+      parentRoute: typeof IndexImport;
+    };
     '/_index/settings': {
-      id: '/_index/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof IndexSettingsImport
-      parentRoute: typeof IndexImport
-    }
+      id: '/_index/settings';
+      path: '/settings';
+      fullPath: '/settings';
+      preLoaderRoute: typeof IndexSettingsImport;
+      parentRoute: typeof IndexImport;
+    };
     '/spaces/$spaceId': {
-      id: '/spaces/$spaceId'
-      path: '/spaces/$spaceId'
-      fullPath: '/spaces/$spaceId'
-      preLoaderRoute: typeof SpacesSpaceIdImport
-      parentRoute: typeof rootRoute
-    }
+      id: '/spaces/$spaceId';
+      path: '/spaces/$spaceId';
+      fullPath: '/spaces/$spaceId';
+      preLoaderRoute: typeof SpacesSpaceIdImport;
+      parentRoute: typeof rootRoute;
+    };
     '/_index/': {
-      id: '/_index/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexIndexImport
-      parentRoute: typeof IndexImport
-    }
+      id: '/_index/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexIndexImport;
+      parentRoute: typeof IndexImport;
+    };
   }
 }
 
 // Create and export the route tree
 
 interface IndexRouteChildren {
-  IndexFriendsRoute: typeof IndexFriendsRoute
-  IndexSettingsRoute: typeof IndexSettingsRoute
-  IndexIndexRoute: typeof IndexIndexRoute
+  IndexFriendsRoute: typeof IndexFriendsRoute;
+  IndexSettingsRoute: typeof IndexSettingsRoute;
+  IndexIndexRoute: typeof IndexIndexRoute;
 }
 
 const IndexRouteChildren: IndexRouteChildren = {
   IndexFriendsRoute: IndexFriendsRoute,
   IndexSettingsRoute: IndexSettingsRoute,
-  IndexIndexRoute: IndexIndexRoute,
-}
+  IndexIndexRoute: IndexIndexRoute
+};
 
-const IndexRouteWithChildren = IndexRoute._addFileChildren(IndexRouteChildren)
+const IndexRouteWithChildren = IndexRoute._addFileChildren(IndexRouteChildren);
 
 export interface FileRoutesByFullPath {
-  '': typeof IndexRouteWithChildren
-  '/friends': typeof IndexFriendsRoute
-  '/settings': typeof IndexSettingsRoute
-  '/spaces/$spaceId': typeof SpacesSpaceIdRoute
-  '/': typeof IndexIndexRoute
+  '': typeof IndexRouteWithChildren;
+  '/friends': typeof IndexFriendsRoute;
+  '/settings': typeof IndexSettingsRoute;
+  '/spaces/$spaceId': typeof SpacesSpaceIdRoute;
+  '/': typeof IndexIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  '/friends': typeof IndexFriendsRoute
-  '/settings': typeof IndexSettingsRoute
-  '/spaces/$spaceId': typeof SpacesSpaceIdRoute
-  '/': typeof IndexIndexRoute
+  '/friends': typeof IndexFriendsRoute;
+  '/settings': typeof IndexSettingsRoute;
+  '/spaces/$spaceId': typeof SpacesSpaceIdRoute;
+  '/': typeof IndexIndexRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/_index': typeof IndexRouteWithChildren
-  '/_index/friends': typeof IndexFriendsRoute
-  '/_index/settings': typeof IndexSettingsRoute
-  '/spaces/$spaceId': typeof SpacesSpaceIdRoute
-  '/_index/': typeof IndexIndexRoute
+  __root__: typeof rootRoute;
+  '/_index': typeof IndexRouteWithChildren;
+  '/_index/friends': typeof IndexFriendsRoute;
+  '/_index/settings': typeof IndexSettingsRoute;
+  '/spaces/$spaceId': typeof SpacesSpaceIdRoute;
+  '/_index/': typeof IndexIndexRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/friends' | '/settings' | '/spaces/$spaceId' | '/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/friends' | '/settings' | '/spaces/$spaceId' | '/'
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: '' | '/friends' | '/settings' | '/spaces/$spaceId' | '/';
+  fileRoutesByTo: FileRoutesByTo;
+  to: '/friends' | '/settings' | '/spaces/$spaceId' | '/';
   id:
     | '__root__'
     | '/_index'
     | '/_index/friends'
     | '/_index/settings'
     | '/spaces/$spaceId'
-    | '/_index/'
-  fileRoutesById: FileRoutesById
+    | '/_index/';
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRouteWithChildren
-  SpacesSpaceIdRoute: typeof SpacesSpaceIdRoute
+  IndexRoute: typeof IndexRouteWithChildren;
+  SpacesSpaceIdRoute: typeof SpacesSpaceIdRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRouteWithChildren,
-  SpacesSpaceIdRoute: SpacesSpaceIdRoute,
-}
+  SpacesSpaceIdRoute: SpacesSpaceIdRoute
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {

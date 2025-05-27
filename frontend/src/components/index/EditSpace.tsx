@@ -59,7 +59,7 @@ export default function EditSpace({ children, space }: EditSpaceProps) {
         title: values.title,
         imagePicsumId: values.imagePicsumId
       });
-      toast.success('Los cambios en el espacio se han guardado' );
+      toast.success('Los cambios en el espacio se han guardado');
       setOpen(false);
     } catch (error) {
       console.error('Error updating space:', error);

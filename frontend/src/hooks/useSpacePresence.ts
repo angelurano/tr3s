@@ -89,7 +89,14 @@ export const useSpacePresence = (spaceId: string) => {
         typing: isTyping
       });
     }
-  }, [debouncedCursorPosition, isTyping, spaceId, upsertPresence, isMouseInCanvas, isPageVisible]);
+  }, [
+    debouncedCursorPosition,
+    isTyping,
+    spaceId,
+    upsertPresence,
+    isMouseInCanvas,
+    isPageVisible
+  ]);
 
   useEffect(() => {
     upsertPresence({
@@ -118,7 +125,8 @@ export const useSpacePresence = (spaceId: string) => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const heartbeatInterval = setInterval(() => {
-      const shouldShowCursor = isMouseInCanvasRef.current && isPageVisibleRef.current;
+      const shouldShowCursor =
+        isMouseInCanvasRef.current && isPageVisibleRef.current;
 
       upsertPresence({
         spaceId,

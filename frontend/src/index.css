@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -17,11 +17,11 @@
   --ring: oklch(0% 0 0);
   --overlay: oklch(0% 0 0 / 0.8);
   --shadow: 2px 2px 0px 0px var(--border);
-  --chart-1: #CA7AFF;
-  --chart-2: #FACC00;
-  --chart-3: #00D696;
-  --chart-4: #FF7A05;
-  --chart-5: #0099FF;
+  --chart-1: #ca7aff;
+  --chart-2: #facc00;
+  --chart-3: #00d696;
+  --chart-4: #ff7a05;
+  --chart-5: #0099ff;
   --chart-active-dot: #000;
   --sidebar: hsl(0 0% 98%);
   --sidebar-foreground: hsl(240 5.3% 26.1%);
@@ -42,11 +42,11 @@
   --border: oklch(0% 0 0);
   --ring: oklch(100% 0 0);
   --shadow: 2px 2px 0px 0px var(--border);
-  --chart-1: #D494FF;
-  --chart-2: #E0B700;
-  --chart-3: #00BD84;
-  --chart-4: #EB6D00;
-  --chart-5: #008AE5;
+  --chart-1: #d494ff;
+  --chart-2: #e0b700;
+  --chart-3: #00bd84;
+  --chart-4: #eb6d00;
+  --chart-5: #008ae5;
   --chart-active-dot: #fff;
   --sidebar: hsl(240 5.9% 10%);
   --sidebar-foreground: hsl(240 4.8% 95.9%);
@@ -96,14 +96,18 @@
     @apply text-foreground font-base bg-background;
   }
 
-  h1, h2, h3, h4, h5, h6{
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading;
   }
 
   html,
   body,
-  #root
-  {
+  #root {
     @apply h-full;
   }
 }

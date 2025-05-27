@@ -6,17 +6,18 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar';
-import logo from '/logoipsum.svg';
+import logo from '../../../../../../../../../../logoipsum.svg';
 import type { ComponentPropsWithoutRef } from 'react';
 import { UserFooter } from './sidebar/SidebarFooter';
-import { PlatformNavigation, SettingsSection, SpacesSection } from './sidebar/SidebarContent';
+import {
+  PlatformNavigation,
+  SettingsSection,
+  SpacesSection
+} from './sidebar/SidebarContent';
 
 type AppSidebarProps = ComponentPropsWithoutRef<typeof Sidebar>;
 
-export function AppSidebar({
-  variant = 'sidebar',
-  ...props
-}: AppSidebarProps) {
+export function AppSidebar({ variant = 'sidebar', ...props }: AppSidebarProps) {
   const { state, isMobile, toggleSidebar } = useSidebar();
   const isCollapsed = state === 'collapsed';
 

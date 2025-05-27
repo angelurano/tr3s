@@ -1,36 +1,15 @@
 import { Link } from '@tanstack/react-router';
-import { Authenticated, Unauthenticated } from 'convex/react';
-import { SignUpButton } from '@clerk/clerk-react';
-import CreateSpace from '../index/CreateSpace';
-import { JoinSpace } from '../index/JoinSpace';
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem
+  SidebarMenuItem
 } from '../ui/sidebar';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger
-} from '../ui/collapsible';
-import {
-  ChevronRight,
-  HomeIcon,
-  LayoutDashboard,
-  LogOut,
-  Plus,
-  Settings,
-  UserRoundCog,
-  UsersRound
-} from 'lucide-react';
+import { HomeIcon, LogOut, Settings, UserRoundCog } from 'lucide-react';
 
-import logo from '/logoipsum.svg';
+import logo from '../../../../../../../../../../../logoipsum.svg';
 import { SidebarUserSpaces } from './SidebarUserSpaces';
 import { SidebarFriendSpaces } from './SidebarFriendSpaces';
 

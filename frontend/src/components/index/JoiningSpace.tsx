@@ -383,7 +383,7 @@ function UnexpectedState() {
 function JoiningSpaceFallback({
   error
   // resetErrorBoundary
-}:  {
+}: {
   error: Error;
   // resetErrorBoundary: () => void;
 }) {

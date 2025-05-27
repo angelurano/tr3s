@@ -18,7 +18,7 @@ export function PresenceIndicator({ users }: PresenceIndicatorProps) {
 
   return (
     <motion.div
-      className='absolute left-3 top-20 flex flex-col items-start justify-center gap-2'
+      className='top-15 absolute left-3 flex flex-col items-start justify-center gap-2'
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}

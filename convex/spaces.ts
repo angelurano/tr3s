@@ -365,7 +365,6 @@ export const heartbeatSpace = mutation({
 
     const { space, normalizedSpaceId } = spaceResult;
 
-    // Solo el autor puede activar/mantener activo el espacio
     if (space.authorId === user._id) {
       await ctx.db.patch(normalizedSpaceId, {
         isActive: true,
