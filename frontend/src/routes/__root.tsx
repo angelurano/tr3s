@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router';
 
 import { Loading } from '@/components/auth/Loading';
 import { useStoreUserEffect } from '@/hooks/useStoreUserEffect';
+import { Toaster } from '@/components/ui/sonner';
 
 export const Route = createRootRoute({
   component: () => <Root />
@@ -10,5 +11,10 @@ export const Route = createRootRoute({
 function Root() {
   const { isLoading } = useStoreUserEffect();
 
-  return <>{isLoading ? <Loading /> : <Outlet />}</>;
+  return (
+    <>
+      {isLoading ? <Loading /> : <Outlet />}
+      <Toaster />
+    </>
+  );
 }

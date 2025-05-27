@@ -30,18 +30,13 @@ export default function DeleteSpace({
   const deleteSpace = useMutation(api.spaces.deleteSpace);
 
   const handleDelete = async () => {
-    // TODO: Show toast sonner
     try {
       await deleteSpace({ spaceId });
-      toast.success('Espacio eliminado correctamente', {
-        description: `El espacio "${spaceTitle}" ha sido eliminado permanentemente.`
-      });
+      toast.success('Espacio eliminado correctamente');
       setOpen(false);
     } catch (error) {
       console.error('Error deleting space:', error);
-      toast.error('Error al eliminar el espacio', {
-        description: 'No se pudo eliminar el espacio. Inténtalo de nuevo.'
-      });
+      toast.error('Error al eliminar el espacio');
     }
   };
 

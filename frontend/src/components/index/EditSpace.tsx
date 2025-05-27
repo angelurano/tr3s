@@ -53,22 +53,17 @@ export default function EditSpace({ children, space }: EditSpaceProps) {
 
   async function onSubmit(values: EditSpaceFormValues) {
     setIsLoading(true);
-    // TODO: Display and check sonner
     try {
       await updateSpace({
         spaceId: space._id,
         title: values.title,
         imagePicsumId: values.imagePicsumId
       });
-      toast.success('Espacio actualizado correctamente', {
-        description: `Los cambios en "${values.title}" se han guardado.`
-      });
+      toast.success('Los cambios en el espacio se han guardado' );
       setOpen(false);
     } catch (error) {
       console.error('Error updating space:', error);
-      toast.error('Error al actualizar el espacio', {
-        description: 'No se pudieron guardar los cambios. Inténtalo de nuevo.'
-      });
+      toast.error('Error al actualizar el espacio');
     } finally {
       setIsLoading(false);
     }
