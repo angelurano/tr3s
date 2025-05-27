@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as crons from "../crons.js";
 import type * as helpers_spaces from "../helpers/spaces.js";
 import type * as http from "../http.js";
 import type * as routes_clerkWebhook from "../routes/clerkWebhook.js";
@@ -32,6 +33,7 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  crons: typeof crons;
   "helpers/spaces": typeof helpers_spaces;
   http: typeof http;
   "routes/clerkWebhook": typeof routes_clerkWebhook;

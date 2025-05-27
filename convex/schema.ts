@@ -14,7 +14,8 @@ export const spaceSchema = v.object({
   isActive: v.boolean(),
   title: v.string(),
   authorId: v.string(),
-  imagePicsumId: v.number()
+  imagePicsumId: v.number(),
+  lastActive: v.optional(v.number())
 });
 
 export const spaceUserSchema = v.object({
@@ -29,7 +30,6 @@ export const spaceUserSchema = v.object({
   lastUpdated: v.number()
 });
 
-// TODO: presence in space when a user join
 export const spacePresenceSchema = v.object({
   userId: v.id('users'),
   spaceId: v.id('spaces'),
@@ -52,6 +52,7 @@ export default defineSchema({
     .index('bySpaceId', ['spaceId']),
   spacesPresences: defineTable(spacePresenceSchema)
     .index('byUserId', ['userId'])
+    .index('bySpaceId', ['spaceId'])
     .index('byUserIdAndSpaceId', ['userId', 'spaceId'])
     .index('bySpaceIdAndLastUpdated', ['spaceId', 'lastUpdated']) // This can be used to know if user is present in a space
 });

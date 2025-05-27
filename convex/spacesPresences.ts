@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { ConvexError, v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { getAuthenticatedUser } from './helpers/user.auth';
@@ -65,7 +64,6 @@ export const upsertPresence = mutation({
   }
 });
 
-// TODO: Check if many petitions are needed
 export const getSpacePresence = query({
   args: {
     spaceId: v.string()
@@ -93,19 +91,22 @@ export const getSpacePresence = query({
       return [];
     }
 
-    // Obtener presencias activas (últimos 30 segundos)
     const now = Date.now();
-    const cutoff = now - 30000; // 30 segundos
+    const cutoff = now - 10000; // 10 sec
 
     const presences = await ctx.db
       .query('spacesPresences')
       .withIndex('bySpaceIdAndLastUpdated', (q) =>
         q.eq('spaceId', normalizedSpaceId).gte('lastUpdated', cutoff)
       )
-      .filter((q) => q.eq(q.field('present'), true))
+      .filter((q) =>
+        q.and(
+          q.eq(q.field('present'), true),
+          q.neq(q.field('userId'), user._id)
+        )
+      )
       .collect();
 
-    // Obtener información de usuarios
     const usersWithPresence = await Promise.all(
       presences.map(async (presence) => {
         const user = await ctx.db.get(presence.userId);

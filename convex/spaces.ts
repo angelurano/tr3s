@@ -351,6 +351,32 @@ export const deleteSpace = mutation({
   }
 });
 
+export const heartbeatSpace = mutation({
+  args: {
+    spaceId: v.string()
+  },
+  handler: async (ctx, { spaceId }) => {
+    const user = await getAuthenticatedUser(ctx);
+    const spaceResult = await getSpaceByIdString(ctx, spaceId);
+
+    if (!spaceResult) {
+      throw new ConvexError('Space not found');
+    }
+
+    const { space, normalizedSpaceId } = spaceResult;
+
+    // Solo el autor puede activar/mantener activo el espacio
+    if (space.authorId === user._id) {
+      await ctx.db.patch(normalizedSpaceId, {
+        isActive: true,
+        lastActive: Date.now()
+      });
+    }
+
+    return { success: true };
+  }
+});
+
 /*
 export const canAccessSpace = query({
   args: {
