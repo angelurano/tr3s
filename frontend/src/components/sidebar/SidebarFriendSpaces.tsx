@@ -13,6 +13,7 @@ import {
 } from '../ui/sidebar';
 import { JoinSpace } from '../index/JoinSpace';
 import { useMatch } from '@tanstack/react-router';
+import { InviteDialog } from '../spaces/InviteDialog';
 
 export function SidebarFriendSpaces() {
   const match = useMatch({ from: '/spaces/$spaceId', shouldThrow: false });
@@ -39,12 +40,11 @@ export function SidebarFriendSpaces() {
 
             {match && (
               <SidebarMenuSubItem>
-                <SidebarMenuSubButton asChild>
-                  {
-                    // TODO: Modal to invite friends, show link and code: match.params.spaceId
-                  }
-                  <span className='cursor-pointer'>Invitar amigos</span>
-                </SidebarMenuSubButton>
+                <InviteDialog spaceId={match.params.spaceId}>
+                  <SidebarMenuSubButton asChild>
+                    <span className='cursor-pointer'>Invitar amigos</span>
+                  </SidebarMenuSubButton>
+                </InviteDialog>
               </SidebarMenuSubItem>
             )}
           </SidebarMenuSub>

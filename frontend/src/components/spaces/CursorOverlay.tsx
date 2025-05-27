@@ -63,8 +63,8 @@ function UserCursor({ user }: UserCursorProps) {
       <div className='-mt-2 ml-2 flex items-center gap-1 rounded-md bg-black/70 px-2 py-1 text-xs text-white backdrop-blur-sm'>
         <Avatar className='h-4 w-4'>
           <AvatarImage src={imageUrl} alt={name} />
-          <AvatarFallback className='h-full w-full bg-main'>
-            <div className='h-full w-full bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:5px_5px] bg-center'/>
+          <AvatarFallback className='bg-main h-full w-full'>
+            <div className='h-full w-full bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:5px_5px] bg-center' />
           </AvatarFallback>
         </Avatar>
         <span className='font-medium'>{name}</span>

@@ -18,7 +18,7 @@ export function PresenceIndicator({ users }: PresenceIndicatorProps) {
 
   return (
     <motion.div
-      className='top-15 absolute left-3 flex flex-col justify-center items-start gap-2'
+      className='top-15 absolute left-3 flex flex-col items-start justify-center gap-2'
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
@@ -69,7 +69,7 @@ function UserAvatar({ user, index }: { user: PresenceUser; index: number }) {
     >
       <Avatar className='h-7 w-7 shadow-sm'>
         <AvatarImage src={imageUrl} alt={name} />
-        <AvatarFallback className='h-full w-full bg-main'>
+        <AvatarFallback className='bg-main h-full w-full'>
           <div className='h-full w-full flex-1 touch-none bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:10px_10px] bg-center' />
         </AvatarFallback>
       </Avatar>

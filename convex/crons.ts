@@ -39,7 +39,7 @@ export const deactivateInactiveSpaces = internalMutation({
 
 crons.interval(
   'deactivate-inactive-spaces',
-  { minutes: 2 },
+  { minutes: 5 },
   internal.crons.deactivateInactiveSpaces
 );
 

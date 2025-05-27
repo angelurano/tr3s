@@ -5,7 +5,15 @@ import { useMutation } from 'convex/react';
 import { useState } from 'react';
 import { api } from '@server/_generated/api';
 import { toast } from 'sonner';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '../ui/dialog';
 
 interface LeaveSpaceDialogProps {
   spaceId: string;
