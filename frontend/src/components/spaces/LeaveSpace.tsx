@@ -23,7 +23,7 @@ interface LeaveSpaceDialogProps {
 export function LeaveSpace({ spaceId }: { spaceId: string }) {
   return (
     <LeaveSpaceDialog spaceId={spaceId}>
-      <Button variant='noShadow' className='flex size-7 cursor-pointer p-0'>
+      <Button variant='noShadow' className='flex size-7 cursor-pointer p-0 rotate-180'>
         <LogOut className='size-full' />
       </Button>
     </LeaveSpaceDialog>

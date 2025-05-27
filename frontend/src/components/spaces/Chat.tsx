@@ -158,8 +158,8 @@ export function Chat() {
   return (
     <div
       className={cn(
-        'absolute bottom-0 left-2 w-full max-w-md rounded-t-lg p-4 transition-all duration-300',
-        isHovering ? 'bg-white/90 shadow-lg' : 'bg-transparent'
+        'absolute bottom-4 right-4 w-full max-w-md rounded-t-lg p-4 transition-all duration-300',
+        isHovering ? 'bg-white/90 shadow-lg dark:bg-gray-800/90' : 'bg-transparent'
       )}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}

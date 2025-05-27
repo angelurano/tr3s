@@ -49,7 +49,7 @@ export function InviteDialog({ spaceId, children }: InviteDialogProps) {
           <div>
             <Label>Código del espacio</Label>
             <div className='flex gap-2'>
-              <Input value={spaceId} readOnly className='flex-1' />
+              <Input value={spaceId} readOnly className='flex-1 truncate' />
               <Button
                 variant='default'
                 size='icon'
@@ -62,7 +62,7 @@ export function InviteDialog({ spaceId, children }: InviteDialogProps) {
           <div>
             <Label>Enlace del espacio</Label>
             <div className='flex gap-2'>
-              <Input value={spaceLink} readOnly className='flex-1' />
+              <Input value={spaceLink} readOnly className='flex-1 truncate' />
               <Button
                 className='cursor-pointer'
                 variant='default'

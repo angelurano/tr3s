@@ -6,6 +6,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { Loading } from '../components/auth/Loading';
 import { api } from '@server/_generated/api';
 import { useEffect, useState } from 'react';
+import type { Space } from '@server/schema';
 
 export const Route = createFileRoute('/spaces/$spaceId')({
   component: CheckSpaceAuth
@@ -13,11 +14,11 @@ export const Route = createFileRoute('/spaces/$spaceId')({
 
 function CheckSpaceAuth() {
   const { spaceId } = Route.useParams();
-  const getSpaceAccess = useQuery(api.spaces.getSpaceAccess, { spaceId });
+  const space = useQuery(api.spaces.getSpaceAccess, { spaceId });
 
-  if (getSpaceAccess === undefined) return <Loading />;
+  if (space === undefined) return <Loading />;
 
-  if (!getSpaceAccess.canAccess) {
+  if (!space.canAccess || space.space === undefined) {
     return (
       <Navigate
         to='/'
@@ -29,7 +30,7 @@ function CheckSpaceAuth() {
     );
   }
 
-  if (getSpaceAccess.status === 'owner') {
+  if (space.status === 'owner') {
     return <EnableSpace spaceId={spaceId} />;
   }
   return <SpacesComponent spaceId={spaceId} />;
