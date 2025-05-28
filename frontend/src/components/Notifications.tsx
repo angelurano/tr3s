@@ -13,12 +13,14 @@ import { Bell } from 'lucide-react';
 import {
   Authenticated,
   Unauthenticated,
+  useMutation,
   usePaginatedQuery
 } from 'convex/react';
 import { api } from '@server/_generated/api';
-import type { Notification } from '@server/schema';
-import { SignIn, SignInButton, SignUpButton } from '@clerk/clerk-react';
-import { useState } from 'react';
+import { SignInButton } from '@clerk/clerk-react';
+import type { Doc } from '@server/_generated/dataModel';
+import { toast } from 'sonner';
+import { Badge } from './ui/badge';
 
 export function Notifications() {
   return (
@@ -62,7 +64,7 @@ function UnauthenticatedNotifications() {
 }
 
 function AuthenticatedNotification() {
-  const { results, status, loadMore } = usePaginatedQuery(
+  const { results/*, status, loadMore */} = usePaginatedQuery(
     api.notification.getUserNotifications,
     {},
     { initialNumItems: 7 }
@@ -88,7 +90,7 @@ function AuthenticatedNotification() {
       <DropdownMenuContent className='w-56'>
         <DropdownMenuLabel>Notificaciones</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        <DropdownMenuGroup className='space-y-1'>
           <NotificationsList
             notifications={results}
             // status={status}
@@ -103,7 +105,7 @@ function AuthenticatedNotification() {
 function NotificationsList({
   notifications
 }: {
-  notifications: Notification[];
+  notifications: Doc<'notifications'>[] | undefined;
 }) {
   if (notifications === undefined) {
     return (
@@ -119,15 +121,129 @@ function NotificationsList({
       </DropdownMenuItem>
     );
   }
-  // TODO: Manage types in each notification, read: clears when user click notify, friend request,
-  // TODO: change key
   return (
     <>
       {notifications.map((notification, index) => (
-        <DropdownMenuItem key={index} className='cursor-pointer text-xs text-pretty'>
-          <span>{notification.content}</span>
-        </DropdownMenuItem>
+        <Notification key={index} notification={notification} />
       ))}
     </>
+  );
+}
+
+export type SpaceRequestNotification = Doc<'notifications'> & {
+  payload: {
+    type: 'spaceRequest';
+    data: {
+      spaceId: string;
+      userId: string;
+    };
+  };
+};
+function Notification({
+  notification
+}: {
+  notification: Doc<'notifications'>;
+}) {
+  if (notification.payload === undefined) {
+    return <NotificationDefault notification={notification} />;
+  }
+
+  if (notification.payload.type === 'spaceRequest') {
+    return (
+      <NotificationRequest
+        notification={notification as SpaceRequestNotification}
+      />
+    );
+  }
+
+  return <NotificationDefault notification={notification} />;
+}
+
+function NotificationDefault({
+  notification
+}: {
+  notification: Doc<'notifications'>;
+}) {
+  const markAsRead = useMutation(api.notification.markAsReadNotification);
+
+  return (
+    <DropdownMenuItem
+      className={`group relative cursor-pointer text-pretty text-xs ${
+        notification.read ? 'bg-background/20' : ''
+      }`}
+      onClick={async () => {
+        if (notification.read) return;
+        await markAsRead({ notificationId: notification._id });
+      }}
+    >
+      <span className='pr-2'>{notification.content}</span>
+    </DropdownMenuItem>
+  );
+}
+
+function NotificationRequest({
+  notification
+}: {
+  notification: SpaceRequestNotification;
+}) {
+  const markAsRead = useMutation(api.notification.markAsReadNotification);
+  const acceptRequest = useMutation(api.spacesUsers.acceptSpaceRequest);
+  const rejectRequest = useMutation(api.spacesUsers.rejectSpaceRequest);
+
+  const handleAccept = async () => {
+    await acceptRequest({
+      spaceId: notification.payload.data.spaceId,
+      userId: notification.payload.data.userId
+    });
+    if (!notification.read)
+      await markAsRead({ notificationId: notification._id });
+    toast.success('Solicitud aceptada');
+  };
+  const handleReject = async () => {
+    await rejectRequest({
+      spaceId: notification.payload.data.spaceId,
+      userId: notification.payload.data.userId
+    });
+    if (!notification.read)
+      await markAsRead({ notificationId: notification._id });
+    toast.success('Solicitud rechazada');
+  };
+
+  return (
+    <DropdownMenuItem
+      className={`group relative cursor-pointer text-pretty text-xs ${
+        notification.read ? 'bg-background/20' : ''
+      }`}
+      onClick={async () => {
+        if (!notification.read)
+          await markAsRead({ notificationId: notification._id });
+        toast.custom(() => (
+          <div className='flex flex-col gap-1'>
+            <span className='text-sm font-semibold'>
+              Solicitud de acceso al espacio
+            </span>
+            <span className='text-xs'>{notification.content}</span>
+            <div className='flex justify-end gap-2'>
+              <Badge
+                variant='default'
+                className='cursor-pointer'
+                onClick={handleReject}
+              >
+                Rechazar
+              </Badge>
+              <Badge
+                variant='neutral'
+                className='cursor-pointer'
+                onClick={handleAccept}
+              >
+                Aceptar
+              </Badge>
+            </div>
+          </div>
+        ));
+      }}
+    >
+      <span className='pr-2'>{notification.content}</span>
+    </DropdownMenuItem>
   );
 }
