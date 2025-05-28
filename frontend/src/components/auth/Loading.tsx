@@ -1,4 +1,4 @@
-import logo from '../../../../../../../../../../../logoipsum.svg';
+import logo from '/logoipsum.svg';
 
 export function Loading() {
   return (

@@ -42,6 +42,29 @@ export const spacePresenceSchema = v.object({
   typing: v.boolean()
 });
 
+export const notificationSchema = v.object({
+  userId: v.id('users'),
+  content: v.string(),
+  read: v.boolean(),
+  payload: v.optional(
+    v.union(
+      v.object({
+        type: v.literal('spaceAccess'),
+        data: v.object({
+          spaceId: v.id('spaces')
+        })
+      }),
+      v.object({
+        type: v.literal('spaceRequest'),
+        data: v.object({
+          spaceId: v.id('spaces'),
+          userId: v.id('users')
+        })
+      }) // TODO: can add more types, like 'spaceInvite', 'friendRequest', etc.
+    )
+  )
+});
+
 export default defineSchema({
   users: defineTable(userSchema)
     .index('byExternalId', ['externalId'])
@@ -54,10 +77,15 @@ export default defineSchema({
     .index('byUserId', ['userId'])
     .index('bySpaceId', ['spaceId'])
     .index('byUserIdAndSpaceId', ['userId', 'spaceId'])
-    .index('bySpaceIdAndLastUpdated', ['spaceId', 'lastUpdated']) // This can be used to know if user is present in a space
+    .index('bySpaceIdAndLastUpdated', ['spaceId', 'lastUpdated']), // This can be used to know if user is present in a space
+  notifications: defineTable(notificationSchema)
+    .index('byUserId', ['userId'])
+    .index('byUserIdAndRead', ['userId', 'read'])
+    .index('byUserIdAndType', ['userId', 'payload.type'])
 });
 
 export type User = Infer<typeof userSchema>;
 export type Space = Infer<typeof spaceSchema>;
 export type SpaceUser = Infer<typeof spaceUserSchema>;
 export type SpacePresence = Infer<typeof spacePresenceSchema>;
+export type Notification = Infer<typeof notificationSchema>;

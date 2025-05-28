@@ -16,6 +16,7 @@ import type {
 import type * as crons from "../crons.js";
 import type * as helpers_spaces from "../helpers/spaces.js";
 import type * as http from "../http.js";
+import type * as notification from "../notification.js";
 import type * as routes_clerkWebhook from "../routes/clerkWebhook.js";
 import type * as routes_spaces from "../routes/spaces.js";
 import type * as schemaShared from "../schemaShared.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   "helpers/spaces": typeof helpers_spaces;
   http: typeof http;
+  notification: typeof notification;
   "routes/clerkWebhook": typeof routes_clerkWebhook;
   "routes/spaces": typeof routes_spaces;
   schemaShared: typeof schemaShared;

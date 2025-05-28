@@ -6,7 +6,7 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar';
-import logo from '../../../../../../../../../../logoipsum.svg';
+import logo from '/logoipsum.svg';
 import type { ComponentPropsWithoutRef } from 'react';
 import { UserFooter } from './sidebar/SidebarFooter';
 import {

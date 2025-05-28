@@ -204,9 +204,8 @@ function PendingSpace({
   spaceId: string;
   lastUpdated?: number;
 }) {
-  // TODO: use query to get status
   const [isCanceling, setIsCanceling] = useState(false);
-  const cancelRequest = useMutation(api.spaces.cancelJoinRequest);
+  const cancelRequest = useMutation(api.spacesUsers.cancelJoinRequest);
 
   const timeAgo = lastUpdated
     ? new Date(lastUpdated).toLocaleString(undefined, {

@@ -1,5 +1,5 @@
 import { DialogDescription, DialogTitle } from './ui/dialog';
-import logo from '../../../../../../../../../../logoipsum.svg';
+import logo from '/logoipsum.svg';
 
 export function LoadingDialog() {
   return (

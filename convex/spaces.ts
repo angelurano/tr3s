@@ -217,34 +217,6 @@ export const enableUserSpace = mutation({
   }
 });
 
-export const cancelJoinRequest = mutation({
-  args: {
-    spaceId: v.string()
-  },
-  handler: async (ctx, { spaceId }) => {
-    const user = await getAuthenticatedUser(ctx);
-    const spaceResult = await getSpaceByIdString(ctx, spaceId);
-
-    if (!spaceResult) {
-      throw new ConvexError('Space not found');
-    }
-
-    const { normalizedSpaceId } = spaceResult;
-    const relation = await getUserSpaceRelation(
-      ctx,
-      user._id,
-      normalizedSpaceId
-    );
-
-    if (!relation || relation.status !== 'pending') {
-      throw new ConvexError('No pending request found');
-    }
-
-    await ctx.db.delete(relation._id);
-    return { success: true };
-  }
-});
-
 export const activateSpace = mutation({
   args: {
     spaceId: v.string()

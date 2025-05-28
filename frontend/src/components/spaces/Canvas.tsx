@@ -1,11 +1,11 @@
 import { useCallback, useEffect } from 'react';
-import { SidebarTrigger } from '../ui/sidebar';
 import { Chat } from './Chat';
 import { PresenceIndicator } from './PresenceIndicator';
 import { Toolbar } from './Toolbar';
 import { UserSection } from './UserSection';
 import { CursorOverlay } from './CursorOverlay';
 import { useSpacePresence } from '@/hooks/useSpacePresence';
+import { TopLeftControls } from './TopLeftControls';
 
 export function Canvas({ spaceId }: { spaceId: string }) {
   const { onlineUsers, updateCursorPosition, setMouseInCanvas } =
@@ -68,10 +68,10 @@ export function Canvas({ spaceId }: { spaceId: string }) {
       onMouseLeave={handleMouseLeave}
     >
       <CursorOverlay users={onlineUsers} />
-      <SidebarTrigger className='relative left-3 top-3 flex-shrink-0 cursor-pointer' />
       <PresenceIndicator users={onlineUsers} />
       <Toolbar spaceId={spaceId} />
       <UserSection spaceId={spaceId} />
+      <TopLeftControls spaceId={spaceId} />
       <Chat />
     </main>
   );
