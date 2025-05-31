@@ -28,8 +28,18 @@ export interface PresenceUser {
   } | null;
 }
 
-const HEARTBEAT_PERIOD = 5_000; // 5 sec
-const CURSOR_UPDATE_DELAY = 75; // 57ms
+const HEARTBEAT_PERIOD = 5 * 1000; // 5 sec
+const CURSOR_UPDATE_DELAY = 66; // 66ms
+const INPUT_TYPING_TIMEOUT = 2 * 1000; // 2 sec
+
+const INITIAL_CURSOR_POSITION: CursorPosition = {
+  x: 0,
+  y: 0
+};
+const OUTSIDE_CURSOR_POSITION: CursorPosition = {
+  x: -1,
+  y: -1
+};
 
 export const useSpacePresence = (spaceId: string) => {
   const [cursorPosition, setCursorPosition] = useState<CursorPosition>({
@@ -39,9 +49,12 @@ export const useSpacePresence = (spaceId: string) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isMouseInCanvas, setIsMouseInCanvas] = useState(true);
   const [isPageVisible, setIsPageVisible] = useState(true);
-  const cursorPositionRef = useRef<CursorPosition>({ x: 0, y: 0 });
+
+  const cursorPositionRef = useRef<CursorPosition>(INITIAL_CURSOR_POSITION);
   const isMouseInCanvasRef = useRef<boolean>(true);
   const isPageVisibleRef = useRef<boolean>(true);
+  const isTypingRef = useRef<boolean>(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const presenceUsers = useQuery(api.spacesPresences.getSpacePresence, {
     spaceId
@@ -58,23 +71,41 @@ export const useSpacePresence = (spaceId: string) => {
     CURSOR_UPDATE_DELAY
   );
 
-  const updateCursorPosition = useCallback((position: CursorPosition) => {
-    setCursorPosition(position);
-    cursorPositionRef.current = position;
-  }, []);
-
-  const setMouseInCanvas = useCallback((inCanvas: boolean) => {
-    setIsMouseInCanvas(inCanvas);
-    isMouseInCanvasRef.current = inCanvas;
-  }, []);
-
   const setPageVisible = useCallback((visible: boolean) => {
     setIsPageVisible(visible);
     isPageVisibleRef.current = visible;
   }, []);
 
-  const updateTyping = useCallback((typing: boolean) => {
-    setIsTyping(typing);
+  const updateCursorPosition = useCallback((position: CursorPosition) => {
+    setCursorPosition(position);
+    cursorPositionRef.current = position;
+  }, []);
+
+  const notifyMouseInCanvas = useCallback((inCanvas: boolean) => {
+    setIsMouseInCanvas(inCanvas);
+    isMouseInCanvasRef.current = inCanvas;
+  }, []);
+
+  const notifyInputTyping = useCallback((hasText: boolean) => {
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+
+    if (hasText) {
+      if (!isTypingRef.current) {
+        setIsTyping(true);
+        isTypingRef.current = true;
+      }
+      typingTimeoutRef.current = setTimeout(() => {
+        setIsTyping(false);
+        isTypingRef.current = false;
+        typingTimeoutRef.current = null;
+      }, INPUT_TYPING_TIMEOUT);
+    } else {
+      setIsTyping(false);
+      isTypingRef.current = false;
+    }
   }, []);
 
   useEffect(() => {
@@ -102,7 +133,7 @@ export const useSpacePresence = (spaceId: string) => {
     upsertPresence({
       spaceId,
       present: true,
-      cursorPosition: { x: 0, y: 0 },
+      cursorPosition: INITIAL_CURSOR_POSITION,
       typing: false
     });
 
@@ -119,6 +150,13 @@ export const useSpacePresence = (spaceId: string) => {
           cursorPosition: cursorPositionRef.current,
           typing: false
         });
+
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+          typingTimeoutRef.current = null;
+        }
+        setIsTyping(false);
+        isTypingRef.current = false;
       }
     };
 
@@ -133,8 +171,8 @@ export const useSpacePresence = (spaceId: string) => {
         present: true,
         cursorPosition: shouldShowCursor
           ? cursorPositionRef.current
-          : { x: -1, y: -1 },
-        typing: isTyping
+          : OUTSIDE_CURSOR_POSITION,
+        typing: isTypingRef.current
       });
       spaceHeartbeat({ spaceId });
     }, HEARTBEAT_PERIOD);
@@ -142,6 +180,11 @@ export const useSpacePresence = (spaceId: string) => {
     return () => {
       clearInterval(heartbeatInterval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
 
       upsertPresence({
         spaceId,
@@ -161,8 +204,8 @@ export const useSpacePresence = (spaceId: string) => {
   return {
     onlineUsers,
     updateCursorPosition,
-    updateTyping,
-    setMouseInCanvas,
+    notifyMouseInCanvas,
+    notifyInputTyping,
     isTyping
   };
 };

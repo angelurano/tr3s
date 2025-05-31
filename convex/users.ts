@@ -3,8 +3,6 @@ import { type UserJSON } from '@clerk/backend';
 import { internalMutation, mutation, type QueryCtx } from './_generated/server';
 import type { User } from './schema';
 
-// TODO: create querys
-
 const userByExternalId = async (ctx: QueryCtx, externalId: string) => {
   return await ctx.db
     .query('users')

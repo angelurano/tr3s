@@ -60,9 +60,15 @@ export const notificationSchema = v.object({
           spaceId: v.id('spaces'),
           userId: v.id('users')
         })
-      }) // TODO: can add more types, like 'spaceInvite', 'friendRequest', etc.
+      }) // TODO: can add more types for notifications, like 'spaceInvite', 'friendRequest', etc.
     )
   )
+});
+
+export const messageSchema = v.object({
+  authorId: v.id('users'),
+  spaceId: v.id('spaces'),
+  body: v.string()
 });
 
 export default defineSchema({
@@ -81,11 +87,16 @@ export default defineSchema({
   notifications: defineTable(notificationSchema)
     .index('byUserId', ['userId'])
     .index('byUserIdAndRead', ['userId', 'read'])
-    .index('byUserIdAndType', ['userId', 'payload.type'])
+    .index('byUserIdAndType', ['userId', 'payload.type']),
+  messages: defineTable(messageSchema)
+    .index('bySpaceId', ['spaceId'])
+    .index('byAuthorIdAndSpaceId', ['authorId', 'spaceId'])
 });
 
+// TODO: Remove this types and use Doc<'table'> from convex/values
 export type User = Infer<typeof userSchema>;
 export type Space = Infer<typeof spaceSchema>;
 export type SpaceUser = Infer<typeof spaceUserSchema>;
 export type SpacePresence = Infer<typeof spacePresenceSchema>;
 export type Notification = Infer<typeof notificationSchema>;
+export type Message = Infer<typeof messageSchema>;

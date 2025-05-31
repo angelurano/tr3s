@@ -6,6 +6,20 @@ interface CursorOverlayProps {
   users: PresenceUser[];
 }
 
+export function CursorOverlay({ users }: CursorOverlayProps) {
+  return (
+    <div className='pointer-events-none absolute inset-0 z-40'>
+      {/* Force tailwind to generate these classes */}
+      <div className='text-chart-1 text-chart-2 text-chart-3 text-chart-4 text-chart-5 hidden h-0 w-0' />
+      <AnimatePresence>
+        {users.map((user) => (
+          <UserCursor key={user.userId} user={user} />
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 interface UserCursorProps {
   user: PresenceUser;
 }
@@ -83,20 +97,6 @@ function UserCursor({ user }: UserCursorProps) {
           </motion.span>
         )}
       </div>
-      {/* Force tailwind to generate these classes */}
-      <div className='text-chart-1 text-chart-2 text-chart-3 text-chart-4 text-chart-5 hidden h-0 w-0' />
     </motion.div>
-  );
-}
-
-export function CursorOverlay({ users }: CursorOverlayProps) {
-  return (
-    <div className='pointer-events-none absolute inset-0 z-40'>
-      <AnimatePresence>
-        {users.map((user) => (
-          <UserCursor key={user.userId} user={user} />
-        ))}
-      </AnimatePresence>
-    </div>
   );
 }

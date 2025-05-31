@@ -1,13 +1,14 @@
 import { query, mutation } from './_generated/server';
-import { zCustomMutation, zCustomQuery } from 'convex-helpers/server/zod';
+import {
+  zCustomMutation /* , zCustomQuery */
+} from 'convex-helpers/server/zod';
 import { NoOp } from 'convex-helpers/server/customFunctions';
 import { createSpaceSchema } from './schemaShared';
 import { ConvexError, v } from 'convex/values';
 import { getAuthenticatedUser } from './helpers/user.auth';
 import { getSpaceByIdString, getUserSpaceRelation } from './helpers/spaces';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zQuery = zCustomQuery(query, NoOp);
+// const zQuery = zCustomQuery(query, NoOp);
 const zMutation = zCustomMutation(mutation, NoOp);
 
 export const createSpace = zMutation({

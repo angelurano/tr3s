@@ -8,8 +8,12 @@ import { useSpacePresence } from '@/hooks/useSpacePresence';
 import { TopLeftControls } from './TopLeftControls';
 
 export function Canvas({ spaceId }: { spaceId: string }) {
-  const { onlineUsers, updateCursorPosition, setMouseInCanvas } =
-    useSpacePresence(spaceId);
+  const {
+    onlineUsers,
+    updateCursorPosition,
+    notifyMouseInCanvas,
+    notifyInputTyping
+  } = useSpacePresence(spaceId);
 
   const handleMouseMove = useCallback(
     (event: React.MouseEvent) => {
@@ -22,12 +26,12 @@ export function Canvas({ spaceId }: { spaceId: string }) {
   );
 
   const handleMouseEnter = useCallback(() => {
-    setMouseInCanvas(true);
-  }, [setMouseInCanvas]);
+    notifyMouseInCanvas(true);
+  }, [notifyMouseInCanvas]);
 
   const handleMouseLeave = useCallback(() => {
-    setMouseInCanvas(false);
-  }, [setMouseInCanvas]);
+    notifyMouseInCanvas(false);
+  }, [notifyMouseInCanvas]);
 
   useEffect(() => {
     const handleWindowMouseLeave = (event: MouseEvent) => {
@@ -37,16 +41,16 @@ export function Canvas({ spaceId }: { spaceId: string }) {
         event.clientX >= window.innerWidth ||
         event.clientY >= window.innerHeight
       ) {
-        setMouseInCanvas(false);
+        notifyMouseInCanvas(false);
       }
     };
 
     const handleWindowFocus = () => {
-      setMouseInCanvas(false);
+      notifyMouseInCanvas(false);
     };
 
     const handleWindowBlur = () => {
-      setMouseInCanvas(false);
+      notifyMouseInCanvas(false);
     };
 
     window.addEventListener('mouseleave', handleWindowMouseLeave);
@@ -58,7 +62,7 @@ export function Canvas({ spaceId }: { spaceId: string }) {
       window.removeEventListener('blur', handleWindowBlur);
       window.removeEventListener('focus', handleWindowFocus);
     };
-  }, [setMouseInCanvas]);
+  }, [notifyMouseInCanvas]);
 
   return (
     <main
@@ -72,7 +76,11 @@ export function Canvas({ spaceId }: { spaceId: string }) {
       <Toolbar spaceId={spaceId} />
       <UserSection spaceId={spaceId} />
       <TopLeftControls spaceId={spaceId} />
-      <Chat />
+      <Chat
+        spaceId={spaceId}
+        notifyInputTyping={notifyInputTyping}
+        users={onlineUsers}
+      />
     </main>
   );
 }

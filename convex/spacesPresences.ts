@@ -49,7 +49,7 @@ export const upsertPresence = mutation({
       userId: user._id,
       spaceId: normalizedSpaceId,
       lastUpdated: Date.now(),
-      typing: typing ?? false,
+      typing: typing ?? existingPresence?.typing ?? false,
       cursorPosition,
       present
     };

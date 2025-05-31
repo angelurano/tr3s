@@ -10,3 +10,15 @@ export const createSpaceSchema = z.object({
     .max(1084, { message: 'ID de imagen no válido.' })
 });
 export type CreateSpaceSchema = z.infer<typeof createSpaceSchema>;
+
+export const createMessageSchema = z.object({
+  body: z
+    .string()
+    .min(1, {
+      message: 'El mensaje no puede estar vacío.'
+    })
+    .max(500, {
+      message: 'El mensaje no puede superar los 500 caracteres.'
+    })
+});
+export type CreateMessageSchema = z.infer<typeof createMessageSchema>;
