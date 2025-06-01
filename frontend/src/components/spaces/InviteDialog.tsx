@@ -40,7 +40,7 @@ export function InviteDialog({ spaceId, children }: InviteDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Invitar usuarios al espacio</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className='text-left'>
             Comparte el código del espacio o el enlace directo para que otros
             usuarios puedan unirse.
           </DialogDescription>

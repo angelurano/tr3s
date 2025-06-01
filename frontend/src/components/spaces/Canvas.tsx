@@ -5,7 +5,7 @@ import { Toolbar } from './Toolbar';
 import { UserSection } from './UserSection';
 import { CursorOverlay } from './CursorOverlay';
 import { useSpacePresence } from '@/hooks/useSpacePresence';
-import { TopLeftControls } from './TopLeftControls';
+import { CanvasControls } from './CanvasControls';
 import { SpacePreview } from './SpacePreview';
 
 export function Canvas({ spaceId }: { spaceId: string }) {
@@ -76,7 +76,7 @@ export function Canvas({ spaceId }: { spaceId: string }) {
       <PresenceIndicator users={onlineUsers} />
       <Toolbar spaceId={spaceId} />
       <UserSection spaceId={spaceId} />
-      <TopLeftControls spaceId={spaceId} />
+      <CanvasControls spaceId={spaceId} />
       <SpacePreview spaceId={spaceId} />
       <Chat
         spaceId={spaceId}

@@ -11,10 +11,12 @@ export function SpacePreview({ spaceId }: SpacePreviewProps) {
   const spaceAccess = useQuery(api.spaces.getSpaceAccess, { spaceId });
 
   if (spaceAccess === undefined || spaceAccess?.space === undefined) {
-    return <Skeleton className='absolute right-3 top-16 h-30 w-35' />;
+    return (
+      <Skeleton className='sm:h-30 sm:w-35 absolute right-3 top-14 h-24 w-24 sm:top-16' />
+    );
   }
   return (
-    <div className='shadow-shadow bg-main text-main-foreground w-35 absolute right-3 top-16 flex flex-col items-center justify-center overflow-hidden rounded-md border-2'>
+    <div className='sm:h-30 sm:w-35 shadow-shadow bg-main text-main-foreground absolute right-3 top-14 flex h-24 w-24 flex-col items-center justify-center overflow-hidden rounded-md border-2 sm:right-3 sm:top-16 sm:translate-x-0'>
       {spaceAccess.space.imagePicsumId !== -1 ? (
         <a
           href={getURLImagePicsum(spaceAccess.space.imagePicsumId, 1000, 600)}
@@ -35,7 +37,7 @@ export function SpacePreview({ spaceId }: SpacePreviewProps) {
       <Link
         to='/spaces/$spaceId'
         params={{ spaceId: spaceAccess.space._id }}
-        className='block w-full max-w-full border-t-2 px-2 py-1'
+        className='block w-full max-w-full flex-1 border-t-2 px-2 py-1'
       >
         <p className='line-clamp-2 text-center text-xs'>
           {spaceAccess.space.title}

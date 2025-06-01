@@ -106,29 +106,27 @@ export function Chat({ spaceId, users, notifyInputTyping }: ChatProps) {
   }, [sortedMessages]);
 
   return (
-    <div className='max-h-3/4 fixed bottom-6 left-1/2 flex w-[250px] -translate-x-1/2 transform flex-col gap-3 sm:w-[320px]'>
+    <div className='max-h-3/5 sm:max-h-3/4 fixed bottom-14 left-1/2 flex w-[250px] -translate-x-1/2 transform flex-col gap-3 sm:bottom-6 sm:w-[320px]'>
       <div
         className='mask-t-from-95% relative flex max-h-full w-full flex-1 flex-col overflow-y-auto scroll-smooth py-1'
         ref={messagesContainerRef}
       >
         {sortedMessages && currentUserId ? (
           sortedMessages.map((message, index, allMessages) => (
-            <>
-              <Message
-                key={message._id}
-                message={message}
-                timeFormatted={formatTime(message._creationTime)}
-                isCurrentUser={message.author._id === currentUserId}
-                consecutive={
-                  index > 0 &&
-                  allMessages[index - 1].author._id === message.author._id &&
-                  checkInTheSameMinute(
-                    new Date(allMessages[index - 1]._creationTime),
-                    new Date(message._creationTime)
-                  )
-                }
-              />
-            </>
+            <Message
+              key={message._id}
+              message={message}
+              timeFormatted={formatTime(message._creationTime)}
+              isCurrentUser={message.author._id === currentUserId}
+              consecutive={
+                index > 0 &&
+                allMessages[index - 1].author._id === message.author._id &&
+                checkInTheSameMinute(
+                  new Date(allMessages[index - 1]._creationTime),
+                  new Date(message._creationTime)
+                )
+              }
+            />
           ))
         ) : (
           <div className='mt-2'>
@@ -254,7 +252,7 @@ function Message({
           </span>
         </div>
         <div
-          className={`text-foreground shadow-shadow border-border mt-1 max-w-xs break-words rounded-lg border-2 px-3 py-2 ${isCurrentUser ? 'bg-main text-main-foreground ml-1 rounded-br-none' : 'bg-secondary-background text-secondary-foreground mr-1 rounded-tl-none'}`}
+          className={`shadow-shadow border-border mt-1 max-w-xs break-words rounded-lg border-2 px-3 py-2 sm:text-base text-sm ${isCurrentUser ? 'bg-main text-main-foreground ml-1 rounded-br-none' : 'bg-secondary-background text-secondary-foreground mr-1 rounded-tl-none'}`}
         >
           {message.body}
         </div>

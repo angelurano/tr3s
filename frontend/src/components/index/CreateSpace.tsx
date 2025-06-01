@@ -86,7 +86,7 @@ function CreateSpaceModal({ children }: { children: ReactNode }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className='max-h-11/12 flex flex-col'>
         {createSpaceStatus === 'idle' && (
           <CreateSpaceForm onSubmit={onSubmit} />
         )}
@@ -138,101 +138,104 @@ function CreateSpaceForm({ onSubmit }: CreateSpaceFormProps) {
         </DialogDescription>
       </DialogHeader>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-          <FormField
-            control={form.control}
-            name='title'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nombre del espacio</FormLabel>
-                <FormControl>
-                  <Input placeholder='Mi espacio colaborativo' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <div className='w-full overflow-y-auto'>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+            <FormField
+              control={form.control}
+              name='title'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre del espacio</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Mi espacio colaborativo' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='imagePicsumId'
-            render={() => (
-              <FormItem>
-                <FormLabel>Selecciona una imagen</FormLabel>
-                <div className='grid grid-cols-3 grid-rows-[repeat(3,_105px)] gap-4 overflow-y-auto p-1'>
-                  <div
-                    onClick={() => handleImageSelect(-1)}
-                    className={`transform cursor-pointer overflow-hidden border transition-all duration-200 hover:scale-[0.98] ${
-                      selectedImageId === -1
-                        ? 'ring-foreground ring-3 ring-offset-1'
-                        : ''
-                    }`}
-                  >
-                    <div className='bg-background h-full w-full bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:28px_28px] bg-center' />
-                  </div>
-
-                  {SPACE_IMAGES_ID.map((imageId) => (
+            <FormField
+              control={form.control}
+              name='imagePicsumId'
+              render={() => (
+                <FormItem>
+                  <FormLabel>Selecciona una imagen</FormLabel>
+                  <div className='grid grid-cols-3 grid-rows-[repeat(3,_105px)] gap-4 overflow-y-auto p-1'>
                     <div
-                      key={`picsum-${imageId}`}
-                      onClick={() => handleImageSelect(imageId)}
+                      onClick={() => handleImageSelect(-1)}
                       className={`transform cursor-pointer overflow-hidden border transition-all duration-200 hover:scale-[0.98] ${
-                        selectedImageId === imageId
+                        selectedImageId === -1
                           ? 'ring-foreground ring-3 ring-offset-1'
                           : ''
                       }`}
                     >
-                      <img
-                        src={getURLImagePicsum(imageId, 400, 300)}
-                        className='h-full w-full object-cover'
-                        alt={`Imagen de picsum ${imageId}`}
+                      <div className='bg-background h-full w-full bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:28px_28px] bg-center' />
+                    </div>
+
+                    {SPACE_IMAGES_ID.map((imageId) => (
+                      <div
+                        key={`picsum-${imageId}`}
+                        onClick={() => handleImageSelect(imageId)}
+                        className={`transform cursor-pointer overflow-hidden border transition-all duration-200 hover:scale-[0.98] ${
+                          selectedImageId === imageId
+                            ? 'ring-foreground ring-3 ring-offset-1'
+                            : ''
+                        }`}
+                      >
+                        <img
+                          src={getURLImagePicsum(imageId, 400, 300)}
+                          className='h-full w-full object-cover'
+                          alt={`Imagen de picsum ${imageId}`}
+                        />
+                      </div>
+                    ))}
+
+                    <div
+                      className={`relative transform cursor-pointer overflow-hidden border transition-all duration-200 hover:scale-[0.98] ${
+                        selectedImageId !== -1 &&
+                        !SPACE_IMAGES_ID.includes(selectedImageId)
+                          ? 'ring-foreground ring-3 ring-offset-1'
+                          : ''
+                      }`}
+                    >
+                      {customImageUrl && (
+                        <img
+                          src={customImageUrl}
+                          className='h-full w-full object-cover'
+                          alt='Imagen personalizada'
+                        />
+                      )}
+                      <CustomImagePicker
+                        onImageSelected={handleCustomImageSelect}
+                        buttonIcon={customImageUrl ? 'edit' : 'plus'}
                       />
                     </div>
-                  ))}
-
-                  <div
-                    className={`relative transform cursor-pointer overflow-hidden border transition-all duration-200 hover:scale-[0.98] ${
-                      selectedImageId !== -1 &&
-                      !SPACE_IMAGES_ID.includes(selectedImageId)
-                        ? 'ring-foreground ring-3 ring-offset-1'
-                        : ''
-                    }`}
-                  >
-                    {customImageUrl && (
-                      <img
-                        src={customImageUrl}
-                        className='h-full w-full object-cover'
-                        alt='Imagen personalizada'
-                      />
-                    )}
-                    <CustomImagePicker
-                      onImageSelected={handleCustomImageSelect}
-                      buttonIcon={customImageUrl ? 'edit' : 'plus'}
-                    />
                   </div>
-                </div>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
 
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant='neutral' type='button'>
-                Cancelar
-              </Button>
-            </DialogClose>
-            <Button
-              type='submit'
-              disabled={!form.formState.isValid || form.formState.isSubmitting}
-              className='transition-colors duration-300'
-            >
-              Crear espacio
-            </Button>
-          </DialogFooter>
-        </form>
-      </Form>
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button variant='neutral' type='button'>
+            Cancelar
+          </Button>
+        </DialogClose>
+        <Button
+          type='submit'
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+          className='transition-colors duration-300'
+          onClick={form.handleSubmit(onSubmit)}
+        >
+          Crear espacio
+        </Button>
+      </DialogFooter>
     </>
   );
 }
