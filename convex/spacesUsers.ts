@@ -216,3 +216,66 @@ export const rejectSpaceRequest = mutation({
     return { success: true };
   }
 });
+
+export const kickUserFromSpace = mutation({
+  args: {
+    spaceId: v.string(),
+    userId: v.id('users')
+  },
+  handler: async (ctx, { spaceId, userId }) => {
+    const author = await getAuthenticatedUser(ctx);
+    const spaceResult = await getSpaceByIdString(ctx, spaceId);
+
+    if (!spaceResult) {
+      throw new ConvexError('Space not found');
+    }
+
+    const { normalizedSpaceId } = spaceResult;
+
+    const authorRelation = await getUserSpaceRelation(
+      ctx,
+      author._id,
+      normalizedSpaceId
+    );
+
+    if (!authorRelation || authorRelation.status !== 'owner') {
+      throw new ConvexError('Only the space owner can kick users');
+    }
+
+    const userRelation = await getUserSpaceRelation(
+      ctx,
+      userId,
+      normalizedSpaceId
+    );
+    if (!userRelation) {
+      throw new ConvexError('User is not a member of this space');
+    }
+    if (userRelation.status === 'owner') {
+      throw new ConvexError('Cannot kick the space owner');
+    }
+    await ctx.db.delete(userRelation._id);
+    await ctx.db.insert('notifications', {
+      userId,
+      content: `You have been kicked from the space "${spaceResult.space.title}"`,
+      read: false,
+      payload: {
+        type: 'spaceAccess',
+        data: {
+          spaceId: normalizedSpaceId
+        }
+      }
+    });
+
+    const userPresence = await ctx.db
+      .query('spacesPresences')
+      .withIndex('byUserIdAndSpaceId', (q) =>
+        q.eq('userId', userId).eq('spaceId', normalizedSpaceId)
+      )
+      .first();
+    if (userPresence) {
+      await ctx.db.delete(userPresence._id);
+    }
+
+    return { success: true };
+  }
+});

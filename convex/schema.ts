@@ -95,7 +95,8 @@ export const notificationSchema = v.object({
 export default defineSchema({
   users: defineTable(userSchema)
     .index('byExternalId', ['externalId'])
-    .index('byToken', ['tokenIdentifier']),
+    .index('byToken', ['tokenIdentifier'])
+    .index('byUsername', ['username']),
   friendships: defineTable(friendshipSchema)
     .index('byFromId_ToId', ['fromId', 'toId'])
     .index('byToId_FromId', ['toId', 'fromId'])

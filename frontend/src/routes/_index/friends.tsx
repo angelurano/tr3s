@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, Users, UserPlus, Search } from 'lucide-react';
+import { Users, UserPlus, Search } from 'lucide-react';
 import { JoinSpace } from '@/components/index/JoinSpace';
 import type { AcceptedFriendsRelations } from '@server/friends';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -27,7 +27,12 @@ function FriendsComponent() {
               </p>
             </div>
           </div>
-          <JoinSpaceButton />
+          <JoinSpace>
+            <Button className='flex items-center gap-2'>
+              <Search className='h-4 w-4' />
+              Unirse a Espacio
+            </Button>
+          </JoinSpace>
         </div>
 
         <Authenticated>
@@ -74,17 +79,6 @@ function FriendsGrid({
         <NewConnectionsCard friends={friends} />
       </div>
     </div>
-  );
-}
-
-function JoinSpaceButton() {
-  return (
-    <JoinSpace>
-      <Button className='flex items-center gap-2'>
-        <Search className='h-4 w-4' />
-        Unirse a Espacio
-      </Button>
-    </JoinSpace>
   );
 }
 

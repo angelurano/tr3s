@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
 import { type PresenceUser } from '@/hooks/useSpacePresence';
 import { motion, AnimatePresence } from 'framer-motion';
+import { UserVisitantProfile } from './UserVisitantProfile';
 
 interface PresenceIndicatorProps {
   users: PresenceUser[];
@@ -67,12 +68,14 @@ function UserAvatar({ user, index }: { user: PresenceUser; index: number }) {
       }}
       className='relative'
     >
-      <Avatar className='h-7 w-7 shadow-sm'>
-        <AvatarImage src={imageUrl} alt={name} />
-        <AvatarFallback className='bg-main h-full w-full'>
-          <div className='h-full w-full flex-1 touch-none bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:10px_10px] bg-center' />
-        </AvatarFallback>
-      </Avatar>
+      <UserVisitantProfile user={user.user}>
+        <Avatar className='h-7 w-7 shadow-sm cursor-pointer'>
+          <AvatarImage src={imageUrl} alt={name} />
+          <AvatarFallback className='bg-main h-full w-full'>
+            <div className='h-full w-full flex-1 touch-none bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:10px_10px] bg-center' />
+          </AvatarFallback>
+        </Avatar>
+      </UserVisitantProfile>
 
       {user.typing ? (
         <motion.div
