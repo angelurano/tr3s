@@ -9,6 +9,7 @@ import { Users, UserPlus, Search } from 'lucide-react';
 import { JoinSpace } from '@/components/index/JoinSpace';
 import type { AcceptedFriendsRelations } from '@server/friends';
 import { Skeleton } from '@/components/ui/skeleton';
+import { FriendProfileDialog } from '@/components/friends/FriendProfileDialog';
 
 export const Route = createFileRoute('/_index/friends')({
   component: FriendsComponent
@@ -109,7 +110,7 @@ function FriendsList({ friends }: FriendsListProps) {
 
   return (
     <Card className='h-full p-6'>
-      <CardHeader className='pb-4'>
+      <CardHeader>
         <CardTitle className='text-foreground text-xl font-semibold'>
           Lista de Amigos ({friends.length})
         </CardTitle>
@@ -164,43 +165,45 @@ function FriendCard({ friend, lastUpdated }: FriendCardProps) {
   const isRecent = Date.now() - lastUpdated < 24 * 60 * 60 * 1000;
 
   return (
-    <div className='border-border/50 hover:bg-secondary-background/50 flex items-center space-x-3 rounded-lg border p-3 transition-colors'>
-      <div className='relative'>
-        <Avatar className='h-10 w-10'>
-          <AvatarImage
-            src={friend.imageUrl}
-            alt={friend.name}
-            className='object-cover'
-          />
-          <AvatarFallback className='bg-main/10 text-main text-sm font-medium'>
-            {getInitials(friend.name)}
-          </AvatarFallback>
-        </Avatar>
-        <div className='border-background absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 bg-emerald-500'></div>
-      </div>
-
-      <div className='min-w-0 flex-1'>
-        <div className='flex items-center gap-2'>
-          <h3 className='text-foreground truncate text-sm font-medium'>
-            {friend.name}
-          </h3>
-          {isRecent && (
-            <Badge
-              variant='neutral'
-              className='bg-emerald-100 text-xs text-emerald-700'
-            >
-              Nuevo
-            </Badge>
-          )}
+    <FriendProfileDialog user={friend}>
+      <div className='border-border/50 hover:bg-secondary-background/50 flex cursor-pointer items-center space-x-3 rounded-lg border p-3 transition-colors'>
+        <div className='relative'>
+          <Avatar className='h-10 w-10'>
+            <AvatarImage
+              src={friend.imageUrl}
+              alt={friend.name}
+              className='object-cover'
+            />
+            <AvatarFallback className='bg-main/10 text-main text-sm font-medium'>
+              {getInitials(friend.name)}
+            </AvatarFallback>
+          </Avatar>
+          <div className='border-background absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 bg-emerald-500'></div>
         </div>
-        <p className='text-foreground/60 truncate text-xs'>
-          @{friend.username}
-        </p>
-        <p className='text-foreground/40 text-xs'>
-          {formatRelativeTime(lastUpdated)}
-        </p>
+
+        <div className='min-w-0 flex-1'>
+          <div className='flex items-center gap-2'>
+            <h3 className='text-foreground truncate text-sm font-medium'>
+              {friend.name}
+            </h3>
+            {isRecent && (
+              <Badge
+                variant='neutral'
+                className='bg-emerald-100 text-xs text-emerald-700'
+              >
+                Nuevo
+              </Badge>
+            )}
+          </div>
+          <p className='text-foreground/60 truncate text-xs'>
+            @{friend.username}
+          </p>
+          <p className='text-foreground/40 text-xs'>
+            {formatRelativeTime(lastUpdated)}
+          </p>
+        </div>
       </div>
-    </div>
+    </FriendProfileDialog>
   );
 }
 

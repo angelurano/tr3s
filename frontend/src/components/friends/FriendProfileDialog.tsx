@@ -26,15 +26,15 @@ interface User {
   imageUrl: string;
 }
 
-interface UserVisitantProfileProps {
+interface FriendProfileDialogProps {
   children?: React.ReactNode;
   user: User;
 }
 
-export function UserVisitantProfile({
+export function FriendProfileDialog({
   children,
   user
-}: UserVisitantProfileProps) {
+}: FriendProfileDialogProps) {
   const match = useMatch({ from: '/spaces/$spaceId', shouldThrow: false });
   const closeButtonRef = useRef<HTMLButtonElement>(null!);
 
@@ -194,7 +194,7 @@ function ButtonRemoveFriend({
   const handleRemoveFriend = async () => {
     try {
       await removeFriend({ friendshipId });
-      toast.success(`Amistad eliminada con ${user.name}`);
+      toast.success(`Amistad eliminada con ${user.username}`);
     } catch (error) {
       toast.error(`Error al eliminar amistad`);
     }

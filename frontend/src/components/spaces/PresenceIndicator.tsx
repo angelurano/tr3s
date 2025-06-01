@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
 import { type PresenceUser } from '@/hooks/useSpacePresence';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserVisitantProfile } from './UserVisitantProfile';
+import { FriendProfileDialog } from '../friends/FriendProfileDialog';
 
 interface PresenceIndicatorProps {
   users: PresenceUser[];
@@ -68,14 +68,14 @@ function UserAvatar({ user, index }: { user: PresenceUser; index: number }) {
       }}
       className='relative'
     >
-      <UserVisitantProfile user={user.user}>
-        <Avatar className='h-7 w-7 shadow-sm cursor-pointer'>
+      <FriendProfileDialog user={user.user}>
+        <Avatar className='h-7 w-7 cursor-pointer shadow-sm'>
           <AvatarImage src={imageUrl} alt={name} />
           <AvatarFallback className='bg-main h-full w-full'>
             <div className='h-full w-full flex-1 touch-none bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:10px_10px] bg-center' />
           </AvatarFallback>
         </Avatar>
-      </UserVisitantProfile>
+      </FriendProfileDialog>
 
       {user.typing ? (
         <motion.div
