@@ -6,6 +6,7 @@ import { UserSection } from './UserSection';
 import { CursorOverlay } from './CursorOverlay';
 import { useSpacePresence } from '@/hooks/useSpacePresence';
 import { TopLeftControls } from './TopLeftControls';
+import { SpacePreview } from './SpacePreview';
 
 export function Canvas({ spaceId }: { spaceId: string }) {
   const {
@@ -76,6 +77,7 @@ export function Canvas({ spaceId }: { spaceId: string }) {
       <Toolbar spaceId={spaceId} />
       <UserSection spaceId={spaceId} />
       <TopLeftControls spaceId={spaceId} />
+      <SpacePreview spaceId={spaceId} />
       <Chat
         spaceId={spaceId}
         notifyInputTyping={notifyInputTyping}
