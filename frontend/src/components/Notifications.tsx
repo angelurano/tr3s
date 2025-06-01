@@ -64,7 +64,7 @@ function UnauthenticatedNotifications() {
 }
 
 function AuthenticatedNotification() {
-  const { results/*, status, loadMore */} = usePaginatedQuery(
+  const { results /*, status, loadMore */ } = usePaginatedQuery(
     api.notification.getUserNotifications,
     {},
     { initialNumItems: 7 }
@@ -139,6 +139,15 @@ export type SpaceRequestNotification = Doc<'notifications'> & {
     };
   };
 };
+export type FriendRequestNotification = Doc<'notifications'> & {
+  payload: {
+    type: 'friendRequest';
+    data: {
+      friendshipId: string;
+      fromId: string;
+    };
+  };
+};
 function Notification({
   notification
 }: {
@@ -150,8 +159,16 @@ function Notification({
 
   if (notification.payload.type === 'spaceRequest') {
     return (
-      <NotificationRequest
+      <NotificationSpaceRequest
         notification={notification as SpaceRequestNotification}
+      />
+    );
+  }
+
+  if (notification.payload.type === 'friendRequest') {
+    return (
+      <NotificationFriendRequest
+        notification={notification as FriendRequestNotification}
       />
     );
   }
@@ -181,7 +198,7 @@ function NotificationDefault({
   );
 }
 
-function NotificationRequest({
+function NotificationSpaceRequest({
   notification
 }: {
   notification: SpaceRequestNotification;
@@ -222,6 +239,69 @@ function NotificationRequest({
             <span className='text-sm font-semibold'>
               Solicitud de acceso al espacio
             </span>
+            <span className='text-xs'>{notification.content}</span>
+            <div className='flex justify-end gap-2'>
+              <Badge
+                variant='default'
+                className='cursor-pointer'
+                onClick={handleReject}
+              >
+                Rechazar
+              </Badge>
+              <Badge
+                variant='neutral'
+                className='cursor-pointer'
+                onClick={handleAccept}
+              >
+                Aceptar
+              </Badge>
+            </div>
+          </div>
+        ));
+      }}
+    >
+      <span className='pr-2'>{notification.content}</span>
+    </DropdownMenuItem>
+  );
+}
+
+function NotificationFriendRequest({
+  notification
+}: {
+  notification: FriendRequestNotification;
+}) {
+  const markAsRead = useMutation(api.notification.markAsReadNotification);
+  const acceptFriend = useMutation(api.friends.acceptFriendRequest);
+  const rejectFriend = useMutation(api.friends.rejectFriendRequest);
+
+  const handleAccept = async () => {
+    await acceptFriend({
+      friendshipId: notification.payload.data.friendshipId
+    });
+    if (!notification.read)
+      await markAsRead({ notificationId: notification._id });
+    toast.success('Solicitud de amistad aceptada');
+  };
+  const handleReject = async () => {
+    await rejectFriend({
+      friendshipId: notification.payload.data.friendshipId
+    });
+    if (!notification.read)
+      await markAsRead({ notificationId: notification._id });
+    toast.success('Solicitud de amistad rechazada');
+  };
+
+  return (
+    <DropdownMenuItem
+      className={`group relative cursor-pointer text-pretty text-xs ${
+        notification.read ? 'bg-background/20' : ''
+      }`}
+      onClick={async () => {
+        if (!notification.read)
+          await markAsRead({ notificationId: notification._id });
+        toast.custom(() => (
+          <div className='flex flex-col gap-1'>
+            <span className='text-sm font-semibold'>Solicitud de amistad</span>
             <span className='text-xs'>{notification.content}</span>
             <div className='flex justify-end gap-2'>
               <Badge

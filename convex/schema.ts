@@ -80,14 +80,14 @@ export const notificationSchema = v.object({
           friendshipId: v.id('friendships'),
           fromId: v.id('users')
         })
-      }), // TODO: can add more types for notifications, like 'spaceInvite', 'friendRequest', 'friendAccepted', etc.
+      }),
       v.object({
         type: v.literal('friendAccepted'),
         data: v.object({
           friendshipId: v.id('friendships'),
           toId: v.id('users')
         })
-      })
+      }) // TODO: can add more types for notifications, like 'spaceInvite', 'friendRequest', 'friendAccepted', etc.
     )
   )
 });
