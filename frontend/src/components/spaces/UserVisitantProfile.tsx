@@ -11,15 +11,16 @@ import {
   DialogTitle,
   DialogTrigger
 } from '../ui/dialog';
-import { UserPlus, UserMinus } from 'lucide-react';
+import { UserPlus, UserMinus, Clock, UserX } from 'lucide-react';
 import { useMatch } from '@tanstack/react-router';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '@server/_generated/api';
 import { toast } from 'sonner';
 import type { Id } from '@server/_generated/dataModel';
+import { Skeleton } from '../ui/skeleton';
 
 interface User {
-  _id: Id<'users'>;
+  _id: string;
   name: string;
   username: string;
   imageUrl: string;
@@ -36,16 +37,6 @@ export function UserVisitantProfile({
 }: UserVisitantProfileProps) {
   const match = useMatch({ from: '/spaces/$spaceId', shouldThrow: false });
   const closeButtonRef = useRef<HTMLButtonElement>(null!);
-
-  const handleAddFriend = () => {
-    // Lógica para agregar amigo
-    /*
-    if (onAddFriend) {
-      onAddFriend();
-    }
-    console.log('Agregando amigo:', user.username);
-    */
-  };
 
   return (
     <Dialog>
@@ -94,18 +85,126 @@ export function UserVisitantProfile({
             />
           )}
 
-          {/* TODO: Implementar lógica para agregar amigo si no es amigo */}
-          <Button
-            variant='default'
-            onClick={handleAddFriend}
-            className='flex items-center gap-2'
-          >
-            <UserPlus className='h-4 w-4' />
-            Agregar como amigo
-          </Button>
+          <ButtonFriend user={user} />
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function ButtonFriend({ user }: { user: User }) {
+  const userRelationship = useQuery(api.friends.getFriendshipByUserId, {
+    userId: user._id as Id<'users'>
+  });
+
+  if (userRelationship === undefined) {
+    return <Skeleton className='bg-muted h-10 w-40 rounded-md' />;
+  }
+
+  if (userRelationship === null) {
+    return <ButtonAddFriend user={user} />;
+  }
+
+  if (
+    userRelationship.status === 'pending' &&
+    userRelationship.toId === user._id
+  ) {
+    return <ButtonPendingFriend />;
+  }
+
+  if (userRelationship.status === 'pending') {
+    return (
+      <ButtonAcceptFriend user={user} friendshipId={userRelationship._id} />
+    );
+  }
+
+  if (userRelationship.status === 'accepted') {
+    return (
+      <ButtonRemoveFriend user={user} friendshipId={userRelationship._id} />
+    );
+  }
+
+  return null;
+}
+
+function ButtonAddFriend({ user }: { user: User }) {
+  const addFriend = useMutation(api.friends.sendFriendRequest);
+
+  const handleAddFriend = async () => {
+    try {
+      await addFriend({ toId: user._id as Id<'users'> });
+      toast.success(`Solicitud de amistad enviada a ${user.name}`);
+    } catch (error) {
+      toast.error(`Error al enviar solicitud de amistad`);
+    }
+  };
+
+  return (
+    <Button variant='default' onClick={handleAddFriend}>
+      <UserPlus className='h-4 w-4' />
+      Agregar amigo
+    </Button>
+  );
+}
+
+function ButtonPendingFriend() {
+  return (
+    <Button variant='neutral' disabled>
+      <Clock className='h-4 w-4' />
+      Solicitud pendiente
+    </Button>
+  );
+}
+
+function ButtonAcceptFriend({
+  user,
+  friendshipId
+}: {
+  user: User;
+  friendshipId: Id<'friendships'>;
+}) {
+  const acceptFriend = useMutation(api.friends.acceptFriendRequest);
+
+  const handleAcceptFriend = async () => {
+    try {
+      await acceptFriend({ friendshipId });
+      toast.success(`Solicitud de amistad aceptada de ${user.name}`);
+    } catch (error) {
+      toast.error(`Error al aceptar solicitud de amistad`);
+    }
+  };
+
+  return (
+    <Button variant='default' onClick={handleAcceptFriend}>
+      <UserPlus className='h-4 w-4' />
+      Aceptar solicitud
+    </Button>
+  );
+}
+
+function ButtonRemoveFriend({
+  user,
+  friendshipId
+}: {
+  user: User;
+  friendshipId: Id<'friendships'>;
+}) {
+  const removeFriend = useMutation(api.friends.removeFriend);
+
+  const handleRemoveFriend = async () => {
+    try {
+      await removeFriend({ friendshipId });
+      toast.success(`Amistad eliminada con ${user.name}`);
+    } catch (error) {
+      toast.error(`Error al eliminar amistad`);
+    }
+  };
+
+  return (
+    <Button variant='default' onClick={handleRemoveFriend}>
+      <UserX className='h-4 w-4' />
+      Eliminar amistad
+    </Button>
   );
 }
 
@@ -119,7 +218,6 @@ function ButtonKickUser({
   closeRef: React.RefObject<HTMLButtonElement> | null;
 }) {
   const access = useQuery(api.spaces.getSpaceAccess, { spaceId });
-  // const kickUser = useMutation(api.spaces.kickUserFromSpace);
 
   if (!access || access.status !== 'owner') {
     return null;
@@ -151,7 +249,7 @@ function KickUserDialog({
 
   const handleKick = async () => {
     try {
-      await kickUser({ spaceId, userId: user._id });
+      await kickUser({ spaceId, userId: user._id as Id<'users'> });
       toast.success(`Usuario expulsado del espacio`);
     } catch (error) {
       toast.error(`Ha ocurrido un error al expulsar al usuario`);

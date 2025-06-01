@@ -98,6 +98,43 @@ export const getPendingRequests = query({
   }
 });
 
+export const getFriendshipByUserId = query({
+  args: {
+    userId: v.id('users')
+  },
+  handler: async (ctx, { userId }) => {
+    const user = await getAuthenticatedUser(ctx);
+
+    if (user._id === userId) {
+      throw new ConvexError('Cannot get friendship with yourself');
+    }
+
+    const friendship = await ctx.db
+      .query('friendships')
+      .withIndex('byFromId_ToId', (q) =>
+        q.eq('fromId', user._id).eq('toId', userId)
+      )
+      .first();
+
+    if (friendship) {
+      return friendship;
+    }
+
+    const reverseFriendship = await ctx.db
+      .query('friendships')
+      .withIndex('byToId_FromId', (q) =>
+        q.eq('toId', user._id).eq('fromId', userId)
+      )
+      .first();
+
+    if (reverseFriendship) {
+      return reverseFriendship;
+    }
+
+    return null;
+  }
+});
+
 export const sendFriendRequest = mutation({
   args: {
     toId: v.id('users')
@@ -216,6 +253,26 @@ export const rejectFriendRequest = mutation({
     }
     if (friendship.status !== 'pending') {
       throw new ConvexError('Friendship is not pending');
+    }
+
+    await ctx.db.delete(friendshipId);
+    return true;
+  }
+});
+
+export const removeFriend = mutation({
+  args: {
+    friendshipId: v.id('friendships')
+  },
+  handler: async (ctx, { friendshipId }) => {
+    const user = await getAuthenticatedUser(ctx);
+
+    const friendship = await ctx.db.get(friendshipId);
+    if (!friendship) {
+      throw new ConvexError('Friendship not found');
+    }
+    if (friendship.fromId !== user._id && friendship.toId !== user._id) {
+      throw new ConvexError('You are not part of this friendship');
     }
 
     await ctx.db.delete(friendshipId);
