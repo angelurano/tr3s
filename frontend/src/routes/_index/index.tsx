@@ -22,8 +22,6 @@ export const Route = createFileRoute('/_index/')({
 function IndexComponent() {
   const { redirect, spaceId } = Route.useSearch();
 
-  // const userSpaces = useQuery(api.spaces.getSpaces);
-
   return (
     <div className='relative flex h-full w-full items-center justify-center'>
       {redirect && <Redirected spaceId={spaceId} />}

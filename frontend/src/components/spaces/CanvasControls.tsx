@@ -19,7 +19,7 @@ export function CanvasControls({ spaceId }: TopLeftControlsProps) {
   const isMobile = useIsMobile();
 
   return (
-    <div className='absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-md bg-white p-2 shadow-md sm:bottom-auto sm:left-3 sm:top-3 md:translate-x-0 dark:bg-gray-800'>
+    <div className='absolute bottom-2 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-md bg-white p-2 shadow-md sm:bottom-auto sm:left-3 sm:top-3 sm:translate-x-0 dark:bg-gray-800'>
       <SidebarTrigger className='flex-shrink-0 cursor-pointer' />
       <ThemeButton variant='noShadow' className='cursor-pointer' />
       {!isMobile && <ToggleFullScreen />}
