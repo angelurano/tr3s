@@ -1,6 +1,11 @@
 import { ConvexError, v, type Validator } from 'convex/values';
 import { type UserJSON } from '@clerk/backend';
-import { internalMutation, mutation, type QueryCtx } from './_generated/server';
+import {
+  internalMutation,
+  mutation,
+  query,
+  type QueryCtx
+} from './_generated/server';
 import type { User } from './schema';
 
 const userByExternalId = async (ctx: QueryCtx, externalId: string) => {
@@ -10,7 +15,7 @@ const userByExternalId = async (ctx: QueryCtx, externalId: string) => {
     .unique();
 };
 
-export const getCurrentUser = async (ctx: QueryCtx) => {
+const getCurrentUser = async (ctx: QueryCtx) => {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) {
     return null;
@@ -25,6 +30,17 @@ export const getCurrentUserThrow = async (ctx: QueryCtx) => {
   }
   return user;
 };
+
+export const getCurrentUserId = query({
+  args: {},
+  handler: async (ctx) => {
+    const user = await getCurrentUser(ctx);
+    if (!user) {
+      throw new ConvexError('User not authenticated');
+    }
+    return user._id;
+  }
+});
 
 export const storeUser = mutation({
   args: {},

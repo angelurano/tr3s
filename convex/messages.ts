@@ -1,42 +1,46 @@
 import { ConvexError, v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { getAuthenticatedUser } from './helpers/user.auth';
-import { getSpaceByIdString, getUserSpaceRelation } from './helpers/spaces';
+import { getSpaceById, getUserSpaceRelation } from './helpers/spaces';
 import { createMessageSchema } from './schemaShared';
+import type { Doc } from './_generated/dataModel';
 
 const FILTER_MESSAGES_TIME = 5 * 60 * 1000; // 5 min
 const FILTER_MAX_MESSAGES = 50;
+
+export type MessageResult = Doc<'messages'> & {
+  author: Pick<Doc<'users'>, '_id' | 'name' | 'username' | 'imageUrl'>;
+};
 export const getSpaceMessages = query({
   args: {
-    spaceId: v.string()
+    spaceId: v.id('spaces')
   },
   handler: async (ctx, { spaceId }) => {
     const user = await getAuthenticatedUser(ctx);
-    const spaceResult = await getSpaceByIdString(ctx, spaceId);
 
-    if (!spaceResult) {
-      return [];
+    const space = await getSpaceById(ctx, spaceId);
+    if (!space) {
+      throw new ConvexError('Space not found');
     }
 
-    const { normalizedSpaceId } = spaceResult;
-    const relation = await getUserSpaceRelation(
-      ctx,
-      user._id,
-      normalizedSpaceId
-    );
+    if (!space.isActive) {
+      throw new ConvexError('Space is not active');
+    }
+
+    const relation = await getUserSpaceRelation(ctx, user._id, spaceId);
 
     if (
       !relation ||
       (relation.status !== 'owner' && relation.status !== 'accepted')
     ) {
-      return [];
+      throw new ConvexError('Access denied');
     }
 
     const maxTimeAgo = Date.now() - FILTER_MESSAGES_TIME;
 
     const messages = await ctx.db
       .query('messages')
-      .withIndex('bySpaceId', (q) => q.eq('spaceId', normalizedSpaceId))
+      .withIndex('bySpaceId', (q) => q.eq('spaceId', spaceId))
       .filter((q) => q.gte(q.field('_creationTime'), maxTimeAgo))
       .order('desc')
       .take(FILTER_MAX_MESSAGES);
@@ -50,14 +54,16 @@ export const getSpaceMessages = query({
             _id: author?._id || null,
             name: author?.name || 'Unknown',
             username: author?.username || 'unknown',
-            email: author?.email || '',
             imageUrl: author?.imageUrl || ''
           }
         };
       })
     );
 
-    return messagesWithUsers.filter((message) => message.author !== null);
+    const res: MessageResult[] = messagesWithUsers.filter(
+      (message) => message.author !== null && message.author._id !== null
+    ) as MessageResult[];
+    return res;
   }
 });
 
