@@ -12,6 +12,7 @@ import { HomeIcon, LogOut, Settings, UserRoundCog } from 'lucide-react';
 import logo from '/logoipsum.svg';
 import { SidebarUserSpaces } from './SidebarUserSpaces';
 import { SidebarFriendSpaces } from './SidebarFriendSpaces';
+import { ProfileSettings } from '../settings/ProfileSettings';
 
 export function PlatformNavigation() {
   return (
@@ -80,10 +81,6 @@ function SidebarLeaveSpace() {
 }
 
 export function SettingsSection() {
-  const handleAccountSettings = () => {
-    console.log('Configuración de cuenta');
-  };
-
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Configuración</SidebarGroupLabel>
@@ -98,12 +95,7 @@ export function SettingsSection() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild onClick={handleAccountSettings}>
-              <button className='w-full cursor-pointer'>
-                <UserRoundCog className='size-5 flex-shrink-0' />
-                <span>Configuración de la cuenta</span>
-              </button>
-            </SidebarMenuButton>
+            <ProfileSettings />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>

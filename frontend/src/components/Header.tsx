@@ -29,7 +29,7 @@ export function Header() {
   const isMobile = useIsMobile();
 
   return (
-    <header className='border-border bg-background top-0 z-40 w-full border-b-2 p-2 shadow-sm md:p-4'>
+    <header className='border-border bg-background top-0 w-full border-b-2 p-2 shadow-sm md:p-4'>
       <div className='mb-0 flex items-center justify-between md:mb-4'>
         <div className='flex items-center gap-1 md:gap-2'>
           <SidebarTrigger className='flex-shrink-0' />
@@ -104,7 +104,7 @@ export function Header() {
         </div>
       </div>
 
-      <NavigationMenu viewport className='hidden md:block'>
+      <NavigationMenu viewport className='hidden md:block z-auto'>
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuLink
