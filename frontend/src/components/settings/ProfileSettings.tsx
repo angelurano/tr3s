@@ -2,7 +2,6 @@ import { Dialog, DialogClose, DialogOverlay } from '../ui/dialog';
 import { Authenticated, Unauthenticated } from 'convex/react';
 import { UserRoundCog, X } from 'lucide-react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { useState } from 'react';
 import { SignUpButton, UserProfile } from '@clerk/clerk-react';
 import { SidebarMenuSubButton } from '../ui/sidebar';
 
@@ -31,7 +30,7 @@ export function ProfileSettings() {
           <DialogOverlay />
           <DialogPrimitive.Content
             data-slot='dialog-content'
-            className='data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed left-[50%] top-[50%] max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] border-0 duration-200 z-100'
+            className='data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-100 fixed left-[50%] top-[50%] max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] border-0 duration-200'
           >
             <DialogPrimitive.Title className='hidden'>
               Configuración de la cuenta

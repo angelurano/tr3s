@@ -7,9 +7,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from '../ui/sidebar';
-import { HomeIcon, LogOut, Settings, UserRoundCog } from 'lucide-react';
+import { HomeIcon, LogOut, Settings } from 'lucide-react';
 
-import logo from '/logoipsum.svg';
+import logo from '../../../../../../../../../../../logoipsum.svg';
 import { SidebarUserSpaces } from './SidebarUserSpaces';
 import { SidebarFriendSpaces } from './SidebarFriendSpaces';
 import { ProfileSettings } from '../settings/ProfileSettings';

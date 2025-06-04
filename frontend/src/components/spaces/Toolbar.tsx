@@ -55,7 +55,7 @@ function ToolbarItem({ icon, name, children }: ToolbarItemProps) {
 
 export function Toolbar({ spaceId: _spaceId }: { spaceId: string }) {
   return (
-    <div className='absolute left-3 top-1/2 flex -translate-y-1/2 flex-col gap-2 z-10'>
+    <div className='absolute left-3 top-1/2 z-10 flex -translate-y-1/2 flex-col gap-2'>
       <div className='flex flex-col items-center gap-2 rounded-md bg-white p-2 shadow-md dark:bg-gray-800'>
         <ToolbarItem
           icon={<img src={giphyLogoUrl} alt='GIF' className='h-4 w-4' />}

@@ -65,7 +65,7 @@ export function Chat({ spaceId, users, notifyInputTyping }: ChatProps) {
     if (!data.body.trim()) return;
 
     try {
-      const messageId = await sendMessages({
+      await sendMessages({
         spaceId: spaceId as Id<'spaces'>,
         body: data.body
       });
@@ -252,7 +252,7 @@ function Message({
           </span>
         </div>
         <div
-          className={`shadow-shadow border-border mt-1 max-w-xs break-words rounded-lg border-2 px-3 py-2 sm:text-base text-sm ${isCurrentUser ? 'bg-main text-main-foreground ml-1 rounded-br-none' : 'bg-secondary-background text-secondary-foreground mr-1 rounded-tl-none'}`}
+          className={`shadow-shadow border-border mt-1 max-w-xs break-words rounded-lg border-2 px-3 py-2 text-sm sm:text-base ${isCurrentUser ? 'bg-main text-main-foreground ml-1 rounded-br-none' : 'bg-secondary-background text-secondary-foreground mr-1 rounded-tl-none'}`}
         >
           {message.body}
         </div>

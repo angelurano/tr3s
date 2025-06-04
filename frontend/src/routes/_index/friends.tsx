@@ -178,7 +178,7 @@ function FriendCard({ friend, lastUpdated }: FriendCardProps) {
               {getInitials(friend.name)}
             </AvatarFallback>
           </Avatar>
-          <div className='border-background absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 bg-emerald-500'></div>
+          <div className='border-background absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 bg-emerald-500' />
         </div>
 
         <div className='min-w-0 flex-1'>

@@ -19,7 +19,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from './ui/navigation-menu';
-import logo from '/logoipsum.svg';
+import logo from '../../../../../../../../../../logoipsum.svg';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ThemeButton } from './theme/ThemeButton';
 import { Notifications } from './Notifications';
@@ -104,7 +104,7 @@ export function Header() {
         </div>
       </div>
 
-      <NavigationMenu viewport className='hidden md:block z-auto'>
+      <NavigationMenu viewport className='z-auto hidden md:block'>
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuLink
