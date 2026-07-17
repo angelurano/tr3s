@@ -1,12 +1,11 @@
 import { DialogDescription, DialogTitle } from './ui/dialog';
-import logo from '../../../../../../../../../../logoipsum.svg';
 
 export function LoadingDialog() {
   return (
     <>
       <DialogTitle className='flex flex-col items-center justify-center pt-8'>
         <img
-          src={logo}
+          src='/logoipsum.svg'
           alt='Logo'
           width={100}
           height={100}

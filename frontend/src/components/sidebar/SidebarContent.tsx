@@ -9,7 +9,6 @@ import {
 } from '../ui/sidebar';
 import { HomeIcon, LogOut, Settings } from 'lucide-react';
 
-import logo from '../../../../../../../../../../../logoipsum.svg';
 import { SidebarUserSpaces } from './SidebarUserSpaces';
 import { SidebarFriendSpaces } from './SidebarFriendSpaces';
 import { ProfileSettings } from '../settings/ProfileSettings';
@@ -32,7 +31,11 @@ export function PlatformNavigation() {
             <SidebarMenuButton asChild>
               <a href='https://tr3s.online'>
                 <div className='flex w-full items-center gap-3'>
-                  <img src={logo} alt='Logo' className='w-5 flex-shrink-0' />
+                  <img
+                    src='/logoipsum.svg'
+                    alt='Logo'
+                    className='w-5 flex-shrink-0'
+                  />
                   <span>Inicio Web</span>
                 </div>
               </a>

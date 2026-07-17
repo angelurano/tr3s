@@ -6,7 +6,6 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar';
-import logo from '../../../../../../../../../../logoipsum.svg';
 import type { ComponentPropsWithoutRef } from 'react';
 import { UserFooter } from './sidebar/SidebarFooter';
 import {
@@ -52,7 +51,9 @@ function SidebarLogo({ isMobile, isCollapsed }: SidebarLogoProps) {
             href='https://tr3s.online'
             className='align-center flex justify-center text-xl font-semibold'
           >
-            {isMobile && <img src={logo} alt='Logo' className='mr-2 h-6' />}
+            {isMobile && (
+              <img src='/logoipsum.svg' alt='Logo' className='mr-2 h-6' />
+            )}
             <span className={`${isCollapsed ? 'hidden' : 'inline-block'}`}>
               tr
             </span>

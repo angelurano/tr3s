@@ -19,7 +19,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from './ui/navigation-menu';
-import logo from '../../../../../../../../../../logoipsum.svg';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { ThemeButton } from './theme/ThemeButton';
 import { Notifications } from './Notifications';
@@ -36,7 +35,7 @@ export function Header() {
           <ThemeButton variant='noShadow' className='cursor-default' />
           <Notifications />
           <a href='https://tr3s.online' className='hidden items-center md:flex'>
-            <img src={logo} alt='Logo' className='h-8' />
+            <img src='/logoipsum.svg' alt='Logo' className='h-8' />
           </a>
           <div className='ml-1 md:hidden'>
             <Breadcrumb className='flex overflow-hidden'>
